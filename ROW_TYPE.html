@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - PL/SQL SELECT, %TYPE, %ROWTYPE</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PL/SQL: SELECT INTO, %TYPE AND %ROWTYPE</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a PL/SQL block to fetch employee name from EMP table for empno = 7369 and display it.</div>
+        <pre class="query">DECLARE
+    v_ename VARCHAR2(20);
+BEGIN
+    SELECT ENAME INTO v_ename FROM SCOTT.EMP WHERE EMPNO = 7369;
+    DBMS_OUTPUT.PUT_LINE('Employee Name: ' || v_ename);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Employee Name: SMITH<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Write a PL/SQL block to retrieve salary of an employee and print it.</div>
+        <pre class="query">DECLARE
+    v_sal NUMBER;
+BEGIN
+    SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = 7788;
+    DBMS_OUTPUT.PUT_LINE('Salary: ' || v_sal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Salary: 3000<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Write a PL/SQL block to fetch employee name and job using a single SELECT statement.</div>
+        <pre class="query">DECLARE
+    v_name VARCHAR2(20);
+    v_job VARCHAR2(20);
+BEGIN
+    SELECT ENAME, JOB INTO v_name, v_job FROM SCOTT.EMP WHERE EMPNO = 7902;
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_name || ', Job: ' || v_job);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Name: FORD, Job: ANALYST<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a PL/SQL block to display department number of an employee using SELECT INTO.</div>
+        <pre class="query">DECLARE
+    v_deptno NUMBER;
+BEGIN
+    SELECT DEPTNO INTO v_deptno FROM SCOTT.EMP WHERE ENAME = 'KING';
+    DBMS_OUTPUT.PUT_LINE('Department Number: ' || v_deptno);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Department Number: 10<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Write a PL/SQL block to fetch hiredate of an employee and display it.</div>
+        <pre class="query">DECLARE
+    v_hiredate DATE;
+BEGIN
+    SELECT HIREDATE INTO v_hiredate FROM SCOTT.EMP WHERE EMPNO = 7839;
+    DBMS_OUTPUT.PUT_LINE('Hiredate: ' || v_hiredate);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Hiredate: 17-NOV-81<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Write a PL/SQL block to count total number of employees using SELECT INTO.</div>
+        <pre class="query">DECLARE
+    v_total NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_total FROM SCOTT.EMP;
+    DBMS_OUTPUT.PUT_LINE('Total Employees: ' || v_total);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Total Employees: 14<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Write a PL/SQL block to declare a variable using %TYPE based on EMP.SAL and display salary.</div>
+        <pre class="query">DECLARE
+    v_sal SCOTT.EMP.SAL%TYPE;
+BEGIN
+    SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = 7499;
+    DBMS_OUTPUT.PUT_LINE('Salary (using %TYPE): ' || v_sal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Salary (using %TYPE): 1600<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Write a PL/SQL block to declare variables for employee name and job using %TYPE.</div>
+        <pre class="query">DECLARE
+    v_ename SCOTT.EMP.ENAME%TYPE;
+    v_job SCOTT.EMP.JOB%TYPE;
+BEGIN
+    SELECT ENAME, JOB INTO v_ename, v_job FROM SCOTT.EMP WHERE EMPNO = 7521;
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_ename || ' | Job: ' || v_job);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Name: WARD | Job: SALESMAN<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Write a PL/SQL block to fetch salary using %TYPE variable and display it.</div>
+        <pre class="query">DECLARE
+    v_emp_sal SCOTT.EMP.SAL%TYPE;
+BEGIN
+    SELECT SAL INTO v_emp_sal FROM SCOTT.EMP WHERE ENAME = 'ADAMS';
+    DBMS_OUTPUT.PUT_LINE('Adams Salary: ' || v_emp_sal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Adams Salary: 1100<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Write a PL/SQL block to calculate annual salary using %TYPE variable.</div>
+        <pre class="query">DECLARE
+    v_sal SCOTT.EMP.SAL%TYPE;
+    v_annual_sal NUMBER;
+BEGIN
+    SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = 7566;
+    v_annual_sal := v_sal * 12;
+    DBMS_OUTPUT.PUT_LINE('Annual Salary: ' || v_annual_sal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Annual Salary: 35700<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Write a PL/SQL block to update salary using %TYPE variable.</div>
+        <pre class="query">DECLARE
+    v_new_sal SCOTT.EMP.SAL%TYPE := 2000;
+BEGIN
+    UPDATE SCOTT.EMP SET SAL = v_new_sal WHERE EMPNO = 7654;
+    DBMS_OUTPUT.PUT_LINE('Salary updated to ' || v_new_sal);
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Salary updated to 2000<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Write a PL/SQL block to declare a variable using %TYPE from DEPT table.</div>
+        <pre class="query">DECLARE
+    v_dname SCOTT.DEPT.DNAME%TYPE;
+    v_loc SCOTT.DEPT.LOC%TYPE;
+BEGIN
+    SELECT DNAME, LOC INTO v_dname, v_loc FROM SCOTT.DEPT WHERE DEPTNO = 10;
+    DBMS_OUTPUT.PUT_LINE('Dept: ' || v_dname || ' | Location: ' || v_loc);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Dept: ACCOUNTING | Location: NEW YORK<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Write a PL/SQL block to declare a record using %ROWTYPE for EMP table.</div>
+        <pre class="query">DECLARE
+    v_emp_rec SCOTT.EMP%ROWTYPE;
+BEGIN
+    SELECT * INTO v_emp_rec FROM SCOTT.EMP WHERE EMPNO = 7698;
+    DBMS_OUTPUT.PUT_LINE('Record fetched for: ' || v_emp_rec.ENAME);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Record fetched for: BLAKE<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Write a PL/SQL block to fetch complete employee record using %ROWTYPE and display fields.</div>
+        <pre class="query">DECLARE
+    v_emp SCOTT.EMP%ROWTYPE;
+BEGIN
+    SELECT * INTO v_emp FROM SCOTT.EMP WHERE EMPNO = 7782;
+    DBMS_OUTPUT.PUT_LINE('ID: ' || v_emp.EMPNO);
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_emp.ENAME);
+    DBMS_OUTPUT.PUT_LINE('Job: ' || v_emp.JOB);
+    DBMS_OUTPUT.PUT_LINE('Salary: ' || v_emp.SAL);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>ID: 7782<br>Name: CLARK<br>Job: MANAGER<br>Salary: 2450<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Write a PL/SQL block to display employee name, salary, and job using %ROWTYPE.</div>
+        <pre class="query">DECLARE
+    v_emp_row SCOTT.EMP%ROWTYPE;
+BEGIN
+    SELECT * INTO v_emp_row FROM SCOTT.EMP WHERE ENAME = 'MILLER';
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_emp_row.ENAME || ' | Salary: ' || v_emp_row.SAL || ' | Job: ' || v_emp_row.JOB);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Name: MILLER | Salary: 1300 | Job: CLERK<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Write a PL/SQL block to update salary using %ROWTYPE variable.</div>
+        <pre class="query">DECLARE
+    v_emp_data SCOTT.EMP%ROWTYPE;
+BEGIN
+    SELECT * INTO v_emp_data FROM SCOTT.EMP WHERE EMPNO = 7844;
+    UPDATE SCOTT.EMP SET SAL = v_emp_data.SAL + 100 WHERE EMPNO = v_emp_data.EMPNO;
+    DBMS_OUTPUT.PUT_LINE('Updated salary for ' || v_emp_data.ENAME);
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Updated salary for TURNER<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Write a PL/SQL block to insert a record using %ROWTYPE.</div>
+        <pre class="query">DECLARE
+    v_new_emp SCOTT.EMP%ROWTYPE;
+BEGIN
+    v_new_emp.EMPNO := 9901;
+    v_new_emp.ENAME := 'ROSHAN';
+    v_new_emp.JOB := 'DEV';
+    v_new_emp.SAL := 4000;
+    v_new_emp.DEPTNO := 20;
+    
+    INSERT INTO SCOTT.EMP VALUES v_new_emp;
+    DBMS_OUTPUT.PUT_LINE('New record inserted using %ROWTYPE.');
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>New record inserted using %ROWTYPE.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - Stored Procedures & Functions</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-text {
+            background-color: #f4f6f7; color: #2c3e50; padding: 15px;
+            border-left: 4px solid #3498db; border-radius: 0 4px 4px 0;
+            font-family: Consolas, monospace; font-size: 14px; margin: 0;
+            white-space: pre; overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PLSQL: STORED PROCEDURES & STORED FUNCTIONS</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a stored procedure to display "Hello Oracle" using DBMS_OUTPUT.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE hello_oracle AS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Hello Oracle');
+END;
+/
+EXEC hello_oracle;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Hello Oracle
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Write a stored procedure to display employee name for a given empno.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE get_emp_name(p_empno NUMBER) AS
+    v_ename SCOTT.EMP.ENAME%TYPE;
+BEGIN
+    SELECT ENAME INTO v_ename FROM SCOTT.EMP WHERE EMPNO = p_empno;
+    DBMS_OUTPUT.PUT_LINE('Employee Name: ' || v_ename);
+END;
+/
+EXEC get_emp_name(7788);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Employee Name: SCOTT
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Write a stored procedure to print salary of an employee.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE print_salary(p_empno NUMBER) AS
+    v_sal NUMBER;
+BEGIN
+    SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = p_empno;
+    DBMS_OUTPUT.PUT_LINE('Salary: ' || v_sal);
+END;
+/
+EXEC print_salary(7369);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Salary: 800
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a stored procedure to display all employees using cursor.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE show_all_emps AS
+    CURSOR c_emp IS SELECT ENAME FROM SCOTT.EMP;
+BEGIN
+    FOR rec IN c_emp LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME);
+    END LOOP;
+END;
+/
+EXEC show_all_emps;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">SMITH
+ALLEN
+WARD
+...
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Write a stored procedure to display department details.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE show_depts AS
+BEGIN
+    FOR rec IN (SELECT * FROM SCOTT.DEPT) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.DEPTNO || ' - ' || rec.DNAME || ' - ' || rec.LOC);
+    END LOOP;
+END;
+/
+EXEC show_depts;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">10 - ACCOUNTING - NEW YORK
+20 - RESEARCH - DALLAS
+...
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Write a stored procedure that takes empno as input and displays employee details.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE get_details(p_no IN NUMBER) AS
+    v_rec SCOTT.EMP%ROWTYPE;
+BEGIN
+    SELECT * INTO v_rec FROM SCOTT.EMP WHERE EMPNO = p_no;
+    DBMS_OUTPUT.PUT_LINE(v_rec.ENAME || ' | ' || v_rec.JOB || ' | ' || v_rec.SAL);
+END;
+/
+EXEC get_details(7900);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">JAMES | CLERK | 950
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Write a stored procedure that takes department number and displays employees of that department.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE dept_emps(p_dept NUMBER) AS
+BEGIN
+    FOR rec IN (SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = p_dept) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME);
+    END LOOP;
+END;
+/
+EXEC dept_emps(10);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">CLARK
+KING
+MILLER
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Write a stored procedure that takes salary as input and displays employees earning more than that.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE high_sal(p_sal NUMBER) AS
+BEGIN
+    FOR rec IN (SELECT ENAME, SAL FROM SCOTT.EMP WHERE SAL > p_sal) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ' : ' || rec.SAL);
+    END LOOP;
+END;
+/
+EXEC high_sal(3000);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">KING : 5000
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Write a stored procedure with OUT parameter to return employee salary.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE get_sal_out(p_id NUMBER, p_sal OUT NUMBER) AS
+BEGIN
+    SELECT SAL INTO p_sal FROM SCOTT.EMP WHERE EMPNO = p_id;
+END;
+/
+DECLARE
+    v_s NUMBER;
+BEGIN
+    get_sal_out(7839, v_s);
+    DBMS_OUTPUT.PUT_LINE('Returned Salary: ' || v_s);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Returned Salary: 5000
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Write a stored procedure with IN OUT parameter to update salary and return new salary.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE update_and_get(p_id NUMBER, p_val IN OUT NUMBER) AS
+BEGIN
+    UPDATE SCOTT.EMP SET SAL = SAL + p_val WHERE EMPNO = p_id;
+    SELECT SAL INTO p_val FROM SCOTT.EMP WHERE EMPNO = p_id;
+END;
+/
+DECLARE
+    v_io NUMBER := 100;
+BEGIN
+    update_and_get(7369, v_io);
+    DBMS_OUTPUT.PUT_LINE('New Salary: ' || v_io);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">New Salary: 900
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Write a stored procedure to insert a new employee record.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE add_emp(id NUMBER, name VARCHAR2, sal NUMBER) AS
+BEGIN
+    INSERT INTO SCOTT.EMP (EMPNO, ENAME, SAL) VALUES (id, name, sal);
+    COMMIT;
+END;
+/
+EXEC add_emp(999, 'TEST', 2500);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Write a stored procedure to update employee salary based on empno.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE change_sal(id NUMBER, new_sal NUMBER) AS
+BEGIN
+    UPDATE SCOTT.EMP SET SAL = new_sal WHERE EMPNO = id;
+    COMMIT;
+END;
+/
+EXEC change_sal(999, 3000);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Write a stored procedure to delete an employee record.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE del_emp(id NUMBER) AS
+BEGIN
+    DELETE FROM SCOTT.EMP WHERE EMPNO = id;
+    COMMIT;
+END;
+/
+EXEC del_emp(999);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Write a stored procedure to increase salary of all employees by 10%.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE raise_all AS
+BEGIN
+    UPDATE SCOTT.EMP SET SAL = SAL * 1.10;
+    COMMIT;
+END;
+/
+EXEC raise_all;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Write a stored procedure to transfer employees from one department to another.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE transfer_emp(old_dept NUMBER, new_dept NUMBER) AS
+BEGIN
+    UPDATE SCOTT.EMP SET DEPTNO = new_dept WHERE DEPTNO = old_dept;
+    COMMIT;
+END;
+/
+EXEC transfer_emp(30, 10);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Write a function to return square of a number.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION get_square(n NUMBER) RETURN NUMBER AS
+BEGIN
+    RETURN n * n;
+END;
+/
+SELECT get_square(5) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">GET_SQUARE(5)
+-------------
+           25</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Write a function to return employee salary based on empno.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION fn_get_sal(id NUMBER) RETURN NUMBER AS
+    v_sal NUMBER;
+BEGIN
+    SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = id;
+    RETURN v_sal;
+END;
+/
+SELECT fn_get_sal(7788) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">FN_GET_SAL(7788)
+----------------
+            3000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Write a function to return total number of employees.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION emp_count RETURN NUMBER AS
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM SCOTT.EMP;
+    RETURN v_count;
+END;
+/
+SELECT emp_count FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">EMP_COUNT
+----------
+        14</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Write a function to return maximum salary from EMP table.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION max_sal RETURN NUMBER AS
+    v_max NUMBER;
+BEGIN
+    SELECT MAX(SAL) INTO v_max FROM SCOTT.EMP;
+    RETURN v_max;
+END;
+/
+SELECT max_sal FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">MAX_SAL
+-------
+   5000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Write a function to return department name based on deptno.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION get_dname(id NUMBER) RETURN VARCHAR2 AS
+    name VARCHAR2(30);
+BEGIN
+    SELECT DNAME INTO name FROM SCOTT.DEPT WHERE DEPTNO = id;
+    RETURN name;
+END;
+/
+SELECT get_dname(10) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">GET_DNAME(10)
+-------------
+ACCOUNTING</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Write a function to calculate bonus (10% of salary) and return it.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION calc_bonus(sal NUMBER) RETURN NUMBER AS
+BEGIN
+    RETURN sal * 0.10;
+END;
+/
+SELECT ENAME, SAL, calc_bonus(SAL) AS BONUS FROM SCOTT.EMP WHERE EMPNO = 7369;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">ENAME   SAL     BONUS
+------- ------- -----
+SMITH   800     80</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Write a function to return grade based on salary.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION get_grade(sal NUMBER) RETURN CHAR AS
+BEGIN
+    IF sal >= 3000 THEN RETURN 'A';
+    ELSIF sal >= 2000 THEN RETURN 'B';
+    ELSE RETURN 'C';
+    END IF;
+END;
+/
+SELECT ENAME, SAL, get_grade(SAL) FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">ENAME   SAL     GET_GRADE(SAL)
+------- ------- --------------
+SMITH   800     C
+SCOTT   3000    A
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Write a function to check whether a number is even or odd.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION even_odd(n NUMBER) RETURN VARCHAR2 AS
+BEGIN
+    IF MOD(n, 2) = 0 THEN RETURN 'EVEN';
+    ELSE RETURN 'ODD';
+    END IF;
+END;
+/
+SELECT even_odd(10), even_odd(15) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">EVEN_ODD(10) EVEN_ODD(15)
+------------ ------------
+EVEN         ODD</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Write a function to return annual salary of an employee.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION annual_sal(sal NUMBER) RETURN NUMBER AS
+BEGIN
+    RETURN sal * 12;
+END;
+/
+SELECT ENAME, annual_sal(SAL) FROM SCOTT.EMP WHERE EMPNO = 7839;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">ENAME   ANNUAL_SAL(SAL)
+------- ---------------
+KING    60000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Write a function to return employee experience (based on hiredate).</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION get_exp(h_date DATE) RETURN NUMBER AS
+BEGIN
+    RETURN TRUNC(MONTHS_BETWEEN(SYSDATE, h_date)/12);
+END;
+/
+SELECT ENAME, get_exp(HIREDATE) AS YEARS FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">ENAME   YEARS
+------- -----
+SMITH   45
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Write a procedure that calls a function to calculate bonus and display result.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE proc_bonus(p_id NUMBER) AS
+    v_sal NUMBER;
+    v_bonus NUMBER;
+BEGIN
+    SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = p_id;
+    v_bonus := calc_bonus(v_sal);
+    DBMS_OUTPUT.PUT_LINE('Bonus is: ' || v_bonus);
+END;
+/
+EXEC proc_bonus(7788);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Bonus is: 300
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Write a function and use it inside SQL query.</div>
+        <pre class="query">-- Using existing calc_bonus function
+SELECT ENAME, JOB, SAL, calc_bonus(SAL) FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Detailed table showing calculated bonus for each employee.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Write a procedure that uses function to update salary.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE update_via_fn(p_id NUMBER) AS
+BEGIN
+    UPDATE SCOTT.EMP SET SAL = SAL + calc_bonus(SAL) WHERE EMPNO = p_id;
+END;
+/
+EXEC update_via_fn(7369);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Write a function that returns highest salary and use it in procedure.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE check_max AS
+    v_max NUMBER;
+BEGIN
+    v_max := max_sal();
+    DBMS_OUTPUT.PUT_LINE('The highest salary is: ' || v_max);
+END;
+/
+EXEC check_max;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">The highest salary is: 5000
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Write a stored procedure to display top 5 highest paid employees.</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE top_5 AS
+BEGIN
+    FOR rec IN (SELECT * FROM (SELECT ENAME, SAL FROM SCOTT.EMP ORDER BY SAL DESC) WHERE ROWNUM <= 5) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ' - ' || rec.SAL);
+    END LOOP;
+END;
+/
+EXEC top_5;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">KING - 5000
+SCOTT - 3000
+FORD - 3000
+JONES - 2975
+BLAKE - 2850</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Write a stored function to return nth highest salary.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION nth_sal(n NUMBER) RETURN NUMBER AS
+    v_sal NUMBER;
+BEGIN
+    SELECT SAL INTO v_sal FROM (
+        SELECT SAL, DENSE_RANK() OVER (ORDER BY SAL DESC) rnk FROM SCOTT.EMP
+    ) WHERE rnk = n AND ROWNUM = 1;
+    RETURN v_sal;
+END;
+/
+SELECT nth_sal(2) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">NTH_SAL(2)
+----------
+      3000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Write a procedure to implement transaction (COMMIT / ROLLBACK).</div>
+        <pre class="query">CREATE OR REPLACE PROCEDURE safe_transfer(id1 NUMBER, id2 NUMBER, amt NUMBER) AS
+BEGIN
+    UPDATE SCOTT.EMP SET SAL = SAL - amt WHERE EMPNO = id1;
+    UPDATE SCOTT.EMP SET SAL = SAL + amt WHERE EMPNO = id2;
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DBMS_OUTPUT.PUT_LINE('Error - Transaction Rolled Back');
+END;
+/
+EXEC safe_transfer(7788, 7902, 500);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">33. Write a function that returns department-wise total salary.</div>
+        <pre class="query">CREATE OR REPLACE FUNCTION dept_sum_sal(d_no NUMBER) RETURN NUMBER AS
+    v_total NUMBER;
+BEGIN
+    SELECT SUM(SAL) INTO v_total FROM SCOTT.EMP WHERE DEPTNO = d_no;
+    RETURN NVL(v_total, 0);
+END;
+/
+SELECT DEPTNO, dept_sum_sal(DEPTNO) FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">DEPTNO  DEPT_SUM_SAL(DEPTNO)
+------- --------------------
+10      8750
+20      10875
+30      9400
+40      0</pre>
+    </div>
+
+</body>
+</html>

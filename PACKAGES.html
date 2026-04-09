@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - PL/SQL Packages</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-text {
+            background-color: #f4f6f7; color: #2c3e50; padding: 15px;
+            border-left: 4px solid #3498db; border-radius: 0 4px 4px 0;
+            font-family: Consolas, monospace; font-size: 14px; margin: 0;
+            white-space: pre; overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PL/SQL: PACKAGES</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a package specification and body to display "Hello Oracle".</div>
+        <pre class="query">-- Specification
+CREATE OR REPLACE PACKAGE pkg_hello AS
+    PROCEDURE say_hello;
+END pkg_hello;
+/
+-- Body
+CREATE OR REPLACE PACKAGE BODY pkg_hello AS
+    PROCEDURE say_hello IS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Hello Oracle');
+    END say_hello;
+END pkg_hello;
+/
+-- Execution
+EXEC pkg_hello.say_hello;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Hello Oracle
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Create a package with one procedure to display employee details.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_emp AS
+    PROCEDURE show_details(p_empno NUMBER);
+END pkg_emp;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_emp AS
+    PROCEDURE show_details(p_empno NUMBER) IS
+        v_name VARCHAR2(20);
+        v_sal NUMBER;
+    BEGIN
+        SELECT ENAME, SAL INTO v_name, v_sal FROM SCOTT.EMP WHERE EMPNO = p_empno;
+        DBMS_OUTPUT.PUT_LINE('Name: ' || v_name || ' Salary: ' || v_sal);
+    END show_details;
+END pkg_emp;
+/
+EXEC pkg_emp.show_details(7788);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Name: SCOTT Salary: 3000
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Create a package containing a function to return square of a number.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_math AS
+    FUNCTION get_square(n NUMBER) RETURN NUMBER;
+END pkg_math;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_math AS
+    FUNCTION get_square(n NUMBER) RETURN NUMBER IS
+    BEGIN
+        RETURN n * n;
+    END get_square;
+END pkg_math;
+/
+SELECT pkg_math.get_square(5) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PKG_MATH.GET_SQUARE(5)
+----------------------
+                    25</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a package with both procedure and function.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_demo AS
+    PROCEDURE print_msg(msg VARCHAR2);
+    FUNCTION add_num(a NUMBER, b NUMBER) RETURN NUMBER;
+END pkg_demo;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_demo AS
+    PROCEDURE print_msg(msg VARCHAR2) IS BEGIN DBMS_OUTPUT.PUT_LINE(msg); END;
+    FUNCTION add_num(a NUMBER, b NUMBER) RETURN NUMBER IS BEGIN RETURN a+b; END;
+END pkg_demo;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Package created.
+Package body created.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Create a package with a global variable and display its value.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_vars AS
+    g_val NUMBER := 100;
+END pkg_vars;
+/
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Global Value: ' || pkg_vars.g_val);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Global Value: 100
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Write a package to store company name as constant and display it.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_const AS
+    c_company CONSTANT VARCHAR2(30) := 'ORACLE CORP';
+END pkg_const;
+/
+EXEC DBMS_OUTPUT.PUT_LINE(pkg_const.c_company);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">ORACLE CORP
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Create a package procedure to insert employee record.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_crud AS
+    PROCEDURE add_emp(id NUMBER, name VARCHAR2);
+END pkg_crud;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_crud AS
+    PROCEDURE add_emp(id NUMBER, name VARCHAR2) IS
+    BEGIN
+        INSERT INTO SCOTT.EMP(EMPNO, ENAME) VALUES (id, name);
+        COMMIT;
+    END add_emp;
+END pkg_crud;
+/
+EXEC pkg_crud.add_emp(9001, 'ROSHAN');</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Create a package procedure to update employee salary.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_upd AS
+    PROCEDURE set_sal(id NUMBER, sal NUMBER);
+END pkg_upd;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_upd AS
+    PROCEDURE set_sal(id NUMBER, sal NUMBER) IS
+    BEGIN
+        UPDATE SCOTT.EMP SET SAL = sal WHERE EMPNO = id;
+        COMMIT;
+    END set_sal;
+END pkg_upd;
+/
+EXEC pkg_upd.set_sal(9001, 5000);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Create a package function to return employee salary.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_func AS
+    FUNCTION get_sal(id NUMBER) RETURN NUMBER;
+END pkg_func;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_func AS
+    FUNCTION get_sal(id NUMBER) RETURN NUMBER IS
+        v_sal NUMBER;
+    BEGIN
+        SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = id;
+        RETURN v_sal;
+    END get_sal;
+END pkg_func;
+/
+SELECT pkg_func.get_sal(7839) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PKG_FUNC.GET_SAL(7839)
+----------------------
+                  5000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Create a package function to calculate bonus (10% of salary).</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_bonus AS
+    FUNCTION calc(id NUMBER) RETURN NUMBER;
+END pkg_bonus;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_bonus AS
+    FUNCTION calc(id NUMBER) RETURN NUMBER IS
+        v_sal NUMBER;
+    BEGIN
+        SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = id;
+        RETURN v_sal * 0.10;
+    END calc;
+END pkg_bonus;
+/
+SELECT pkg_bonus.calc(7788) FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PKG_BONUS.CALC(7788)
+--------------------
+                 300</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Create a package that uses cursor to display all employees.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_cur AS
+    PROCEDURE list_all;
+END pkg_cur;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_cur AS
+    PROCEDURE list_all IS
+        CURSOR c_emp IS SELECT ENAME FROM SCOTT.EMP;
+    BEGIN
+        FOR r IN c_emp LOOP
+            DBMS_OUTPUT.PUT_LINE(r.ENAME);
+        END LOOP;
+    END list_all;
+END pkg_cur;
+/
+EXEC pkg_cur.list_all;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">SMITH
+ALLEN
+...
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Create a package with overloaded procedures (same name, different parameters).</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_overload AS
+    PROCEDURE find(id NUMBER);
+    PROCEDURE find(name VARCHAR2);
+END pkg_overload;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_overload AS
+    PROCEDURE find(id NUMBER) IS 
+        v_n VARCHAR2(20);
+    BEGIN 
+        SELECT ENAME INTO v_n FROM SCOTT.EMP WHERE EMPNO = id;
+        DBMS_OUTPUT.PUT_LINE('Found by ID: ' || v_n); 
+    END;
+    PROCEDURE find(name VARCHAR2) IS 
+        v_i NUMBER;
+    BEGIN 
+        SELECT EMPNO INTO v_i FROM SCOTT.EMP WHERE ENAME = name;
+        DBMS_OUTPUT.PUT_LINE('Found by Name, ID: ' || v_i); 
+    END;
+END pkg_overload;
+/
+EXEC pkg_overload.find(7788);
+EXEC pkg_overload.find('SCOTT');</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Found by ID: SCOTT
+Found by Name, ID: 7788</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Create a package to simulate banking operations (deposit, withdraw, balance check).</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_bank AS
+    PROCEDURE deposit(amt NUMBER);
+    PROCEDURE withdraw(amt NUMBER);
+    FUNCTION get_bal RETURN NUMBER;
+END pkg_bank;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_bank AS
+    v_balance NUMBER := 1000; -- Initial Balance
+    PROCEDURE deposit(amt NUMBER) IS BEGIN v_balance := v_balance + amt; END;
+    PROCEDURE withdraw(amt NUMBER) IS BEGIN v_balance := v_balance - amt; END;
+    FUNCTION get_bal RETURN NUMBER IS BEGIN RETURN v_balance; END;
+END pkg_bank;
+/
+BEGIN
+    pkg_bank.deposit(500);
+    pkg_bank.withdraw(200);
+    DBMS_OUTPUT.PUT_LINE('Balance: ' || pkg_bank.get_bal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Balance: 1300
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Create a package that uses exception handling for all operations.</div>
+        <pre class="query">CREATE OR REPLACE PACKAGE pkg_exc AS
+    PROCEDURE safe_div(a NUMBER, b NUMBER);
+END pkg_exc;
+/
+CREATE OR REPLACE PACKAGE BODY pkg_exc AS
+    PROCEDURE safe_div(a NUMBER, b NUMBER) IS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Result: ' || (a/b));
+    EXCEPTION
+        WHEN ZERO_DIVIDE THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Cannot divide by zero');
+    END safe_div;
+END pkg_exc;
+/
+EXEC pkg_exc.safe_div(10, 0);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Error: Cannot divide by zero
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+</body>
+</html>

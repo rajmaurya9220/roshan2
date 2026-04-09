@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - DML Commands</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 {
+            margin: 5px 0;
+            font-size: 26px;
+            color: #2c3e50;
+        }
+        .header h2 {
+            margin: 5px 0;
+            font-size: 20px;
+            font-weight: normal;
+        }
+        .header h3 {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #555;
+        }
+        .student-info {
+            text-align: right;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .student-info p {
+            margin: 2px 0;
+            font-weight: 600;
+        }
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .query {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            overflow-x: auto;
+            margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .output-text {
+            background-color: #f4f6f7;
+            color: #2c3e50;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            border-radius: 0 4px 4px 0;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            margin: 0;
+            white-space: pre;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: Data Manipulation Language (DML) Commands</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Insert a record into STUDENT table with values: SID = 101, SNAME = 'RAHUL', AGE = 20, COURSE = 'MCA'.</div>
+        <pre class="query">INSERT INTO STUDENT (SID, SNAME, AGE, COURSE) 
+VALUES (101, 'RAHUL', 20, 'MCA');
+
+SELECT * FROM STUDENT WHERE SID = 101;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row inserted.
+
+SID        SNAME           AGE        COURSE
+---------- --------------- ---------- ----------
+101        RAHUL           20         MCA</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Insert a record into EMPLOYEE table with EID = 201, ENAME = 'ANITA', SALARY = 45000, DEPTNO = 10.</div>
+        <pre class="query">INSERT INTO EMPLOYEE (EID, ENAME, SALARY, DEPTNO) 
+VALUES (201, 'ANITA', 45000, 10);
+
+SELECT * FROM EMPLOYEE WHERE EID = 201;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row inserted.
+
+EID        ENAME           SALARY     DEPTNO
+---------- --------------- ---------- ----------
+201        ANITA           45000      10</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Insert a new department into DEPT table; DEPTNO = 50, DNAME = 'TRAINING', LOC = 'DELHI'</div>
+        <pre class="query">INSERT INTO SCOTT.DEPT (DEPTNO, DNAME, LOC) 
+VALUES (50, 'TRAINING', 'DELHI');
+
+SELECT * FROM SCOTT.DEPT WHERE DEPTNO = 50;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row inserted.
+
+DEPTNO     DNAME          LOC
+---------- -------------- -------------
+50         TRAINING       DELHI</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Insert a record into BOOK table with only BOOK_ID, TITLE, and PRICE.</div>
+        <pre class="query">INSERT INTO BOOK (BOOK_ID, TITLE, PRICE) 
+VALUES (1, 'Database Systems', 500);
+
+SELECT BOOK_ID, TITLE, PRICE FROM BOOK;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row inserted.
+
+BOOK_ID    TITLE               PRICE
+---------- ------------------- ----------
+1          Database Systems    500</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Insert multiple rows into COURSE table.</div>
+        <pre class="query">INSERT ALL 
+  INTO COURSE (CID, CNAME, DURATION) VALUES (1, 'BCA', 3)
+  INTO COURSE (CID, CNAME, DURATION) VALUES (2, 'MCA', 2)
+  INTO COURSE (CID, CNAME, DURATION) VALUES (3, 'BTECH', 4)
+SELECT * FROM DUAL;
+
+SELECT * FROM COURSE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">3 rows inserted.
+
+CID        CNAME           DURATION
+---------- --------------- ----------
+1          BCA             3
+2          MCA             2
+3          BTECH           4</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Insert data into EMP_COPY table from the EMP table.</div>
+        <pre class="query">INSERT INTO EMP_COPY 
+SELECT * FROM SCOTT.EMP;
+
+SELECT COUNT(*) AS TOTAL_ROWS_INSERTED FROM EMP_COPY;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">14 rows inserted.
+
+TOTAL_ROWS_INSERTED
+-------------------
+                 14</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Insert employees from EMP whose salary is greater than 3000 into EMP_HIGH_SAL.</div>
+        <pre class="query">INSERT INTO EMP_HIGH_SAL 
+SELECT * FROM SCOTT.EMP WHERE SAL > 3000;
+
+SELECT EMPNO, ENAME, SAL FROM EMP_HIGH_SAL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row inserted.
+
+EMPNO      ENAME      SAL
+---------- ---------- ----------
+7839       KING       5000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Insert employees hired after 1981 into EMP_NEW_HIRE.</div>
+        <pre class="query">INSERT INTO EMP_NEW_HIRE 
+SELECT * FROM SCOTT.EMP WHERE HIREDATE > '31-DEC-1981';
+
+SELECT EMPNO, ENAME, HIREDATE FROM EMP_NEW_HIRE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">4 rows inserted.
+
+EMPNO      ENAME      HIREDATE
+---------- ---------- ---------
+7788       SCOTT      19-APR-1987
+7876       ADAMS      23-MAY-1987
+7902       FORD       03-DEC-1981
+7934       MILLER     23-JAN-1982</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Insert department numbers and names from DEPT into a table called DEPT_BACKUP.</div>
+        <pre class="query">INSERT INTO DEPT_BACKUP (DEPTNO, DNAME) 
+SELECT DEPTNO, DNAME FROM SCOTT.DEPT;
+
+SELECT * FROM DEPT_BACKUP;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">4 rows inserted.
+
+DEPTNO     DNAME
+---------- --------------
+10         ACCOUNTING
+20         RESEARCH
+30         SALES
+40         OPERATIONS</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Insert employee names and salaries into a table EMP_SALARY_RECORD.</div>
+        <pre class="query">INSERT INTO EMP_SALARY_RECORD (ENAME, SAL) 
+SELECT ENAME, SAL FROM SCOTT.EMP;
+
+SELECT COUNT(*) AS RECORDS_INSERTED FROM EMP_SALARY_RECORD;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">14 rows inserted.
+
+RECORDS_INSERTED
+----------------
+              14</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Update the salary of employee SMITH to 2000.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET SAL = 2000 
+WHERE ENAME = 'SMITH';
+
+SELECT EMPNO, ENAME, SAL FROM SCOTT.EMP WHERE ENAME = 'SMITH';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row updated.
+
+EMPNO      ENAME      SAL
+---------- ---------- ----------
+7369       SMITH      2000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Increase salary of all employees by 10%.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET SAL = SAL + (SAL * 0.10);
+
+SELECT ENAME, JOB, SAL FROM SCOTT.EMP WHERE ROWNUM <= 3;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">14 rows updated.
+
+ENAME      JOB       SAL
+---------- --------- ----------
+SMITH      CLERK     2200
+ALLEN      SALESMAN  1760
+WARD       SALESMAN  1375</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Update the department number of employee ALLEN to 20.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET DEPTNO = 20 
+WHERE ENAME = 'ALLEN';
+
+SELECT ENAME, DEPTNO FROM SCOTT.EMP WHERE ENAME = 'ALLEN';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row updated.
+
+ENAME      DEPTNO
+---------- ----------
+ALLEN      20</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Update commission of SALESMAN to 500.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET COMM = 500 
+WHERE JOB = 'SALESMAN';
+
+SELECT ENAME, JOB, COMM FROM SCOTT.EMP WHERE JOB = 'SALESMAN';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">4 rows updated.
+
+ENAME      JOB       COMM
+---------- --------- ----------
+ALLEN      SALESMAN  500
+WARD       SALESMAN  500
+MARTIN     SALESMAN  500
+TURNER     SALESMAN  500</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Update job of employee MILLER to MANAGER.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET JOB = 'MANAGER' 
+WHERE ENAME = 'MILLER';
+
+SELECT ENAME, JOB FROM SCOTT.EMP WHERE ENAME = 'MILLER';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row updated.
+
+ENAME      JOB
+---------- ---------
+MILLER     MANAGER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Increase salary of employees in department 10 by 20%.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET SAL = SAL + (SAL * 0.20) 
+WHERE DEPTNO = 10;
+
+SELECT ENAME, DEPTNO, SAL FROM SCOTT.EMP WHERE DEPTNO = 10;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">3 rows updated.
+
+ENAME      DEPTNO     SAL
+---------- ---------- ----------
+CLARK      10         2940
+KING       10         6000
+MILLER     10         1560</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Update salary of employees whose job is CLERK to 1500.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET SAL = 1500 
+WHERE JOB = 'CLERK';
+
+SELECT ENAME, JOB, SAL FROM SCOTT.EMP WHERE JOB = 'CLERK';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">4 rows updated.
+
+ENAME      JOB       SAL
+---------- --------- ----------
+SMITH      CLERK     1500
+ADAMS      CLERK     1500
+JAMES      CLERK     1500
+MILLER     CLERK     1500</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Update location of department 30 to MUMBAI.</div>
+        <pre class="query">UPDATE SCOTT.DEPT 
+SET LOC = 'MUMBAI' 
+WHERE DEPTNO = 30;
+
+SELECT DEPTNO, DNAME, LOC FROM SCOTT.DEPT WHERE DEPTNO = 30;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row updated.
+
+DEPTNO     DNAME          LOC
+---------- -------------- -------------
+30         SALES          MUMBAI</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Update commission of employees who have NULL commission to 100.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET COMM = 100 
+WHERE COMM IS NULL;
+
+SELECT COUNT(*) AS UPDATED_COMM_EMPLOYEES FROM SCOTT.EMP WHERE COMM = 100;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">10 rows updated.
+
+UPDATED_COMM_EMPLOYEES
+----------------------
+                    10</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Update salary of employees who earn less than average salary.</div>
+        <pre class="query">UPDATE SCOTT.EMP 
+SET SAL = SAL + 500 
+WHERE SAL < (SELECT AVG(SAL) FROM SCOTT.EMP);
+
+SELECT COUNT(*) AS EMPLOYEES_UPDATED FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">8 rows updated.
+
+EMPLOYEES_UPDATED
+-----------------
+               14</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Delete employee SMITH from EMP table.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE ENAME = 'SMITH';
+
+SELECT ENAME FROM SCOTT.EMP WHERE ENAME = 'SMITH';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row deleted.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Delete all employees working in department 30.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE DEPTNO = 30;
+
+SELECT COUNT(*) AS REMAINING_IN_DEPT30 FROM SCOTT.EMP WHERE DEPTNO = 30;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">6 rows deleted.
+
+REMAINING_IN_DEPT30
+-------------------
+                  0</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Delete employees whose salary is less than 1000.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE SAL < 1000;
+
+SELECT ENAME, SAL FROM SCOTT.EMP WHERE SAL < 1000;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">2 rows deleted.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Delete employees hired before 1981.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE HIREDATE < '01-JAN-81';
+
+SELECT ENAME, HIREDATE FROM SCOTT.EMP WHERE HIREDATE < '01-JAN-81';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row deleted.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Delete employees who do not receive commission.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE COMM IS NULL OR COMM = 0;
+
+SELECT COUNT(*) AS EMPLOYEES_WITHOUT_COMM FROM SCOTT.EMP WHERE COMM IS NULL OR COMM = 0;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">11 rows deleted.
+
+EMPLOYEES_WITHOUT_COMM
+----------------------
+                     0</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Delete departments located in CHICAGO.</div>
+        <pre class="query">DELETE FROM SCOTT.DEPT 
+WHERE LOC = 'CHICAGO';
+
+SELECT * FROM SCOTT.DEPT WHERE LOC = 'CHICAGO';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row deleted.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Delete employees whose job is CLERK.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE JOB = 'CLERK';
+
+SELECT ENAME, JOB FROM SCOTT.EMP WHERE JOB = 'CLERK';</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">4 rows deleted.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Delete employees earning the minimum salary.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE SAL = (SELECT MIN(SAL) FROM SCOTT.EMP);</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row deleted.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Delete employees working in departments located in NEW YORK.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE DEPTNO IN (SELECT DEPTNO FROM SCOTT.DEPT WHERE LOC = 'NEW YORK');</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">3 rows deleted.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Delete employees whose manager number is NULL.</div>
+        <pre class="query">DELETE FROM SCOTT.EMP 
+WHERE MGR IS NULL;
+
+SELECT ENAME, MGR FROM SCOTT.EMP WHERE MGR IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1 row deleted.
+
+no rows selected.</pre>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - WHERE, ORDER BY, ALIAS</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 900px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: WHERE Clause, ORDER BY Clause, and Aliases</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Display employees whose salary is greater than 3000.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE SAL > 3000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Display employees working in department 10.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE DEPTNO = 10;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Display employees whose job is 'CLERK'.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB = 'CLERK';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Display employees hired after 01-JAN-1981.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE HIREDATE > '01-JAN-1981';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Display employees whose salary is less than 1500.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE SAL < 1500;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Display employees whose salary is > 2000 and job is 'MANAGER'.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE SAL > 2000 AND JOB = 'MANAGER';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Display employees working in department 10 or 20.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE DEPTNO IN (10, 20);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Display employees whose job is 'SALESMAN' and salary > 1500.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB = 'SALESMAN' AND SAL > 1500;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Display employees who are either CLERK or ANALYST.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB IN ('CLERK', 'ANALYST');</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Display employees hired before 1982 and working in department 30.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE HIREDATE < '01-JAN-1982' AND DEPTNO = 30;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Display employees working in departments 10, 20, or 30.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE DEPTNO IN (10, 20, 30);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Display employees whose job is not MANAGER or CLERK.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB NOT IN ('MANAGER', 'CLERK');</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Display employees whose department is not 10.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE DEPTNO != 10;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Display employees whose salary is between 1000 and 3000.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE SAL BETWEEN 1000 AND 3000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Display employees hired between 01-JAN-1981 and 31-DEC-1981.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE HIREDATE BETWEEN '01-JAN-1981' AND '31-DEC-1981';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Display all employees ordered by salary in ascending order.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP ORDER BY SAL ASC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Display all employees ordered by salary in descending order.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP ORDER BY SAL DESC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Display employees ordered by hire date.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP ORDER BY HIREDATE;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Display employees ordered by department number and salary.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP ORDER BY DEPTNO, SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Display employees ordered by job (ascending) and salary (descending).</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP ORDER BY JOB ASC, SAL DESC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Display employee names ordered alphabetically.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP ORDER BY ENAME ASC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>ADAMS</td></tr>
+            <tr><td>ALLEN</td></tr>
+            <tr><td>BLAKE</td></tr>
+            <tr><td>CLARK</td></tr>
+            <tr><td>FORD</td></tr>
+            <tr><td>JAMES</td></tr>
+            <tr><td>JONES</td></tr>
+            <tr><td>KING</td></tr>
+            <tr><td>MARTIN</td></tr>
+            <tr><td>MILLER</td></tr>
+            <tr><td>SCOTT</td></tr>
+            <tr><td>SMITH</td></tr>
+            <tr><td>TURNER</td></tr>
+            <tr><td>WARD</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Display employees of department 30 ordered by salary.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE DEPTNO = 30 ORDER BY SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Display employees ordered by annual salary.</div>
+        <pre class="query">SELECT ENAME, SAL*12 AS "ANNUAL_SALARY" FROM SCOTT.EMP ORDER BY "ANNUAL_SALARY";</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>ANNUAL_SALARY</th></tr>
+            <tr><td>SMITH</td><td>9600</td></tr>
+            <tr><td>JAMES</td><td>11400</td></tr>
+            <tr><td>ADAMS</td><td>13200</td></tr>
+            <tr><td>WARD</td><td>15000</td></tr>
+            <tr><td>MARTIN</td><td>15000</td></tr>
+            <tr><td>MILLER</td><td>15600</td></tr>
+            <tr><td>TURNER</td><td>18000</td></tr>
+            <tr><td>ALLEN</td><td>19200</td></tr>
+            <tr><td>CLARK</td><td>29400</td></tr>
+            <tr><td>BLAKE</td><td>34200</td></tr>
+            <tr><td>JONES</td><td>35700</td></tr>
+            <tr><td>SCOTT</td><td>36000</td></tr>
+            <tr><td>FORD</td><td>36000</td></tr>
+            <tr><td>KING</td><td>60000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Display employees ordered by commission.</div>
+        <pre class="query">SELECT ENAME, COMM FROM SCOTT.EMP ORDER BY COMM;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>COMM</th></tr>
+            <tr><td>TURNER</td><td>0</td></tr>
+            <tr><td>ALLEN</td><td>300</td></tr>
+            <tr><td>WARD</td><td>500</td></tr>
+            <tr><td>MARTIN</td><td>1400</td></tr>
+            <tr><td>SMITH</td><td>-</td></tr>
+            <tr><td>JONES</td><td>-</td></tr>
+            <tr><td>BLAKE</td><td>-</td></tr>
+            <tr><td>CLARK</td><td>-</td></tr>
+            <tr><td>SCOTT</td><td>-</td></tr>
+            <tr><td>KING</td><td>-</td></tr>
+            <tr><td>ADAMS</td><td>-</td></tr>
+            <tr><td>JAMES</td><td>-</td></tr>
+            <tr><td>FORD</td><td>-</td></tr>
+            <tr><td>MILLER</td><td>-</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Display employees ordered by job and name.</div>
+        <pre class="query">SELECT ENAME, JOB FROM SCOTT.EMP ORDER BY JOB, ENAME;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>JOB</th></tr>
+            <tr><td>FORD</td><td>ANALYST</td></tr>
+            <tr><td>SCOTT</td><td>ANALYST</td></tr>
+            <tr><td>ADAMS</td><td>CLERK</td></tr>
+            <tr><td>JAMES</td><td>CLERK</td></tr>
+            <tr><td>MILLER</td><td>CLERK</td></tr>
+            <tr><td>SMITH</td><td>CLERK</td></tr>
+            <tr><td>BLAKE</td><td>MANAGER</td></tr>
+            <tr><td>CLARK</td><td>MANAGER</td></tr>
+            <tr><td>JONES</td><td>MANAGER</td></tr>
+            <tr><td>KING</td><td>PRESIDENT</td></tr>
+            <tr><td>ALLEN</td><td>SALESMAN</td></tr>
+            <tr><td>MARTIN</td><td>SALESMAN</td></tr>
+            <tr><td>TURNER</td><td>SALESMAN</td></tr>
+            <tr><td>WARD</td><td>SALESMAN</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Display employee name as Employee_Name.</div>
+        <pre class="query">SELECT ENAME AS "Employee_Name" FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Employee_Name</th></tr>
+            <tr><td>SMITH</td></tr>
+            <tr><td>ALLEN</td></tr>
+            <tr><td>WARD</td></tr>
+            <tr><td>JONES</td></tr>
+            <tr><td>MARTIN</td></tr>
+            <tr><td>BLAKE</td></tr>
+            <tr><td>CLARK</td></tr>
+            <tr><td>SCOTT</td></tr>
+            <tr><td>KING</td></tr>
+            <tr><td>TURNER</td></tr>
+            <tr><td>ADAMS</td></tr>
+            <tr><td>JAMES</td></tr>
+            <tr><td>FORD</td></tr>
+            <tr><td>MILLER</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Display salary as Monthly_Salary.</div>
+        <pre class="query">SELECT SAL AS "Monthly_Salary" FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Monthly_Salary</th></tr>
+            <tr><td>800</td></tr>
+            <tr><td>1600</td></tr>
+            <tr><td>1250</td></tr>
+            <tr><td>2975</td></tr>
+            <tr><td>1250</td></tr>
+            <tr><td>2850</td></tr>
+            <tr><td>2450</td></tr>
+            <tr><td>3000</td></tr>
+            <tr><td>5000</td></tr>
+            <tr><td>1500</td></tr>
+            <tr><td>1100</td></tr>
+            <tr><td>950</td></tr>
+            <tr><td>3000</td></tr>
+            <tr><td>1300</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Display employee name and job with aliases.</div>
+        <pre class="query">SELECT ENAME AS "Emp_Name", JOB AS "Emp_Job" FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Emp_Name</th><th>Emp_Job</th></tr>
+            <tr><td>SMITH</td><td>CLERK</td></tr>
+            <tr><td>ALLEN</td><td>SALESMAN</td></tr>
+            <tr><td>WARD</td><td>SALESMAN</td></tr>
+            <tr><td>JONES</td><td>MANAGER</td></tr>
+            <tr><td>MARTIN</td><td>SALESMAN</td></tr>
+            <tr><td>BLAKE</td><td>MANAGER</td></tr>
+            <tr><td>CLARK</td><td>MANAGER</td></tr>
+            <tr><td>SCOTT</td><td>ANALYST</td></tr>
+            <tr><td>KING</td><td>PRESIDENT</td></tr>
+            <tr><td>TURNER</td><td>SALESMAN</td></tr>
+            <tr><td>ADAMS</td><td>CLERK</td></tr>
+            <tr><td>JAMES</td><td>CLERK</td></tr>
+            <tr><td>FORD</td><td>ANALYST</td></tr>
+            <tr><td>MILLER</td><td>CLERK</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Display department number as Dept_No.</div>
+        <pre class="query">SELECT DEPTNO AS "Dept_No" FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Dept_No</th></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>10</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>10</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Display employee name and salary with meaningful aliases.</div>
+        <pre class="query">SELECT ENAME AS "Employee_Name", SAL AS "Salary_Amount" FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Employee_Name</th><th>Salary_Amount</th></tr>
+            <tr><td>SMITH</td><td>800</td></tr>
+            <tr><td>ALLEN</td><td>1600</td></tr>
+            <tr><td>WARD</td><td>1250</td></tr>
+            <tr><td>JONES</td><td>2975</td></tr>
+            <tr><td>MARTIN</td><td>1250</td></tr>
+            <tr><td>BLAKE</td><td>2850</td></tr>
+            <tr><td>CLARK</td><td>2450</td></tr>
+            <tr><td>SCOTT</td><td>3000</td></tr>
+            <tr><td>KING</td><td>5000</td></tr>
+            <tr><td>TURNER</td><td>1500</td></tr>
+            <tr><td>ADAMS</td><td>1100</td></tr>
+            <tr><td>JAMES</td><td>950</td></tr>
+            <tr><td>FORD</td><td>3000</td></tr>
+            <tr><td>MILLER</td><td>1300</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Display commission as Incentive.</div>
+        <pre class="query">SELECT COMM AS "Incentive" FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Incentive</th></tr>
+            <tr><td>-</td></tr>
+            <tr><td>300</td></tr>
+            <tr><td>500</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>1400</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>0</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>-</td></tr>
+            <tr><td>-</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Display employee name, job, and salary with aliases, ordered by job.</div>
+        <pre class="query">SELECT ENAME AS "Name", JOB AS "Role", SAL AS "Pay" FROM SCOTT.EMP ORDER BY "Role";</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Name</th><th>Role</th><th>Pay</th></tr>
+            <tr><td>SCOTT</td><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>FORD</td><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>SMITH</td><td>CLERK</td><td>800</td></tr>
+            <tr><td>ADAMS</td><td>CLERK</td><td>1100</td></tr>
+            <tr><td>JAMES</td><td>CLERK</td><td>950</td></tr>
+            <tr><td>MILLER</td><td>CLERK</td><td>1300</td></tr>
+            <tr><td>JONES</td><td>MANAGER</td><td>2975</td></tr>
+            <tr><td>BLAKE</td><td>MANAGER</td><td>2850</td></tr>
+            <tr><td>CLARK</td><td>MANAGER</td><td>2450</td></tr>
+            <tr><td>KING</td><td>PRESIDENT</td><td>5000</td></tr>
+            <tr><td>ALLEN</td><td>SALESMAN</td><td>1600</td></tr>
+            <tr><td>WARD</td><td>SALESMAN</td><td>1250</td></tr>
+            <tr><td>MARTIN</td><td>SALESMAN</td><td>1250</td></tr>
+            <tr><td>TURNER</td><td>SALESMAN</td><td>1500</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">33. Display employees of department 30 whose salary > 1500, ordered by salary.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE DEPTNO = 30 AND SAL > 1500 ORDER BY SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">34. Display employees whose commission is NOT NULL, ordered by commission.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE COMM IS NOT NULL ORDER BY COMM;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">35. Display employees whose salary is between 1500 and 3000, ordered by salary.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE SAL BETWEEN 1500 AND 3000 ORDER BY SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">36. Display employee name and department, ordered by department and name.</div>
+        <pre class="query">SELECT ENAME, DEPTNO FROM SCOTT.EMP ORDER BY DEPTNO, ENAME;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DEPTNO</th></tr>
+            <tr><td>CLARK</td><td>10</td></tr>
+            <tr><td>KING</td><td>10</td></tr>
+            <tr><td>MILLER</td><td>10</td></tr>
+            <tr><td>ADAMS</td><td>20</td></tr>
+            <tr><td>FORD</td><td>20</td></tr>
+            <tr><td>JONES</td><td>20</td></tr>
+            <tr><td>SCOTT</td><td>20</td></tr>
+            <tr><td>SMITH</td><td>20</td></tr>
+            <tr><td>ALLEN</td><td>30</td></tr>
+            <tr><td>BLAKE</td><td>30</td></tr>
+            <tr><td>JAMES</td><td>30</td></tr>
+            <tr><td>MARTIN</td><td>30</td></tr>
+            <tr><td>TURNER</td><td>30</td></tr>
+            <tr><td>WARD</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">37. Display employees whose name starts with 'S', ordered by salary.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'S%' ORDER BY SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">38. Display employees hired before 1982 with aliases, ordered by hire date.</div>
+        <pre class="query">SELECT ENAME AS "EmpName", HIREDATE AS "Date_Of_Joining" FROM SCOTT.EMP WHERE HIREDATE < '01-JAN-1982' ORDER BY "Date_Of_Joining";</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EmpName</th><th>Date_Of_Joining</th></tr>
+            <tr><td>SMITH</td><td>17-DEC-1980</td></tr>
+            <tr><td>ALLEN</td><td>20-FEB-1981</td></tr>
+            <tr><td>WARD</td><td>22-FEB-1981</td></tr>
+            <tr><td>JONES</td><td>02-APR-1981</td></tr>
+            <tr><td>BLAKE</td><td>01-MAY-1981</td></tr>
+            <tr><td>CLARK</td><td>09-JUN-1981</td></tr>
+            <tr><td>TURNER</td><td>08-SEP-1981</td></tr>
+            <tr><td>MARTIN</td><td>28-SEP-1981</td></tr>
+            <tr><td>KING</td><td>17-NOV-1981</td></tr>
+            <tr><td>JAMES</td><td>03-DEC-1981</td></tr>
+            <tr><td>FORD</td><td>03-DEC-1981</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">39. Display employee name as Name and salary as Pay for department 10.</div>
+        <pre class="query">SELECT ENAME AS "Name", SAL AS "Pay" FROM SCOTT.EMP WHERE DEPTNO = 10;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Name</th><th>Pay</th></tr>
+            <tr><td>CLARK</td><td>2450</td></tr>
+            <tr><td>KING</td><td>5000</td></tr>
+            <tr><td>MILLER</td><td>1300</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">40. Display employees whose commission is NULL, ordered by salary descending.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE COMM IS NULL ORDER BY SAL DESC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">41. Display employee name and annual salary, ordered by annual salary.</div>
+        <pre class="query">SELECT ENAME, SAL*12 AS "ANNUAL_SALARY" FROM SCOTT.EMP ORDER BY "ANNUAL_SALARY";</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>ANNUAL_SALARY</th></tr>
+            <tr><td>SMITH</td><td>9600</td></tr>
+            <tr><td>JAMES</td><td>11400</td></tr>
+            <tr><td>ADAMS</td><td>13200</td></tr>
+            <tr><td>WARD</td><td>15000</td></tr>
+            <tr><td>MARTIN</td><td>15000</td></tr>
+            <tr><td>MILLER</td><td>15600</td></tr>
+            <tr><td>TURNER</td><td>18000</td></tr>
+            <tr><td>ALLEN</td><td>19200</td></tr>
+            <tr><td>CLARK</td><td>29400</td></tr>
+            <tr><td>BLAKE</td><td>34200</td></tr>
+            <tr><td>JONES</td><td>35700</td></tr>
+            <tr><td>SCOTT</td><td>36000</td></tr>
+            <tr><td>FORD</td><td>36000</td></tr>
+            <tr><td>KING</td><td>60000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">42. Display employees whose commission is NULL but job is SALESMAN.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE COMM IS NULL AND JOB = 'SALESMAN';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td colspan="8">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">43. Display employees whose manager is NULL and salary > 4000.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE MGR IS NULL AND SAL > 4000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">44. Display employees who do not earn commission and work in department 20.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE (COMM IS NULL OR COMM = 0) AND DEPTNO = 20;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">45. Display employees whose commission is NOT NULL and department is 30.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE COMM IS NOT NULL AND DEPTNO = 30;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">46. Display employees whose commission is NULL or salary > 3000.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE COMM IS NULL OR SAL > 3000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">47. Display employees whose commission is NULL and salary > 2000.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE COMM IS NULL AND SAL > 2000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">48. Display employees whose manager is not NULL.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE MGR IS NOT NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-1980</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-1981</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-1981</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-1981</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-1987</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-1981</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-1987</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-1981</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-1981</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-1982</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">49. Display employees who do not have a manager.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE MGR IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-1981</td><td>5000</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">50. Display employees who are getting commission.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE COMM IS NOT NULL AND COMM > 0;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-1981</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-1981</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-1981</td><td>1250</td><td>1400</td><td>30</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

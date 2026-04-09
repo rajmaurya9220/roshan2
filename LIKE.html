@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - Pattern Matching (LIKE)</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 900px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: Pattern Matching Operator (LIKE)</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Display employees whose name starts with A.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'A%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Display employees whose name starts with S.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'S%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-87</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Display employees whose name ends with N.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%N';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Display employees whose name ends with R.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%R';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Display employees whose name contains LL.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%LL%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Display employees whose name contains AR.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%AR%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Display employees whose job starts with M.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE 'M%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Display employees whose job ends with AN.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE '%AN';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Display employees whose job contains CL.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE '%CL%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Display departments whose location starts with N.</div>
+        <pre class="query">SELECT * FROM SCOTT.DEPT WHERE LOC LIKE 'N%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>DNAME</th><th>LOC</th></tr>
+            <tr><td>10</td><td>ACCOUNTING</td><td>NEW YORK</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Display employees whose name has exactly 4 characters.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '____';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-81</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-81</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Display employees whose name has exactly 5 characters.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '_____';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-87</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Display employees whose name has A as the second character.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '_A%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Display employees whose name has L as the third character.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '__L%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Display employees whose job has exactly 6 characters.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE '______';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td colspan="8">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Display employees whose name starts with any letter but ends with N.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '_%N';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Display employees whose job starts with any one character and ends with ER.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE '_%ER';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Display employees whose name has A as the first and N as the last character.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'A%N';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Display employees whose name has exactly 2 characters before 'E'.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '__E%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td colspan="8">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Display employees whose name has exactly 1 character after 'A'.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%A_';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td colspan="8">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Display employees whose name starts with A and ends with N.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'A%N';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Display employees whose name contains E anywhere.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%E%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Display employees whose name does not contain A.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME NOT LIKE '%A%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-87</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-81</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-81</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Display employees whose job contains MAN.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE '%MAN%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Display employees whose job does not start with C.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB NOT LIKE 'C%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-87</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-81</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-81</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Display employees whose name contains two L consecutively.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%LL%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Display employees whose name starts with J and has S anywhere.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'J%S%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Display employees whose job starts with S and ends with AN.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE 'S%AN';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Display employees whose name contains A as the second last character.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%A_';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td colspan="8">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Display employees whose name contains exactly one character between A and E.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%A_E%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Display employees whose name starts with S and salary > 2000.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'S%' AND SAL > 2000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-87</td><td>3000</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Display employees whose job ends with MAN and department is 20.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE '%MAN' AND DEPTNO = 20;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td colspan="8">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">33. Display employees whose name contains A and commission is NULL.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%A%' AND COMM IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">34. Display employees whose job starts with C and salary < 1500.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE 'C%' AND SAL < 1500;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">35. Display employees whose name ends with S and hired after 1981.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%S' AND HIREDATE > '31-DEC-81';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">36. Display employees whose name starts with M and department is not 10.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'M%' AND DEPTNO != 10;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">37. Display employees whose job contains ER and salary between 2000 and 3000.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE '%ER%' AND SAL BETWEEN 2000 AND 3000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">38. Display employees whose name starts with A or job starts with S.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'A%' OR JOB LIKE 'S%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">39. Display employees whose name contains I and manager is NOT NULL.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%I%' AND MGR IS NOT NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">40. Display employees whose name ends with N and commission is NOT NULL.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%N' AND COMM IS NOT NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">41. Display employee name as Name whose name starts with S, ordered alphabetically.</div>
+        <pre class="query">SELECT ENAME AS "Name" FROM SCOTT.EMP WHERE ENAME LIKE 'S%' ORDER BY ENAME;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Name</th></tr>
+            <tr><td>SCOTT</td></tr>
+            <tr><td>SMITH</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">42. Display employee name and salary as Pay whose name contains A, ordered by salary.</div>
+        <pre class="query">SELECT ENAME, SAL AS "Pay" FROM SCOTT.EMP WHERE ENAME LIKE '%A%' ORDER BY SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>Pay</th></tr>
+            <tr><td>JAMES</td><td>950</td></tr>
+            <tr><td>ADAMS</td><td>1100</td></tr>
+            <tr><td>WARD</td><td>1250</td></tr>
+            <tr><td>MARTIN</td><td>1250</td></tr>
+            <tr><td>ALLEN</td><td>1600</td></tr>
+            <tr><td>CLARK</td><td>2450</td></tr>
+            <tr><td>BLAKE</td><td>2850</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">43. Display employees whose job starts with M, ordered by job and salary.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE 'M%' ORDER BY JOB, SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">44. Display employees whose name ends with E, ordered by hire date.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%E' ORDER BY HIREDATE;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">45. Display employee name and annual salary for employees whose name starts with J.</div>
+        <pre class="query">SELECT ENAME, SAL*12 AS "Annual_Salary" FROM SCOTT.EMP WHERE ENAME LIKE 'J%';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>Annual_Salary</th></tr>
+            <tr><td>JONES</td><td>35700</td></tr>
+            <tr><td>JAMES</td><td>11400</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">46. Display employees whose name contains R, ordered by department number.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%R%' ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-81</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">47. Display employee name as Employee whose job ends with AN.</div>
+        <pre class="query">SELECT ENAME AS "Employee" FROM SCOTT.EMP WHERE JOB LIKE '%AN';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Employee</th></tr>
+            <tr><td>ALLEN</td></tr>
+            <tr><td>WARD</td></tr>
+            <tr><td>MARTIN</td></tr>
+            <tr><td>TURNER</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">48. Display employees whose name starts with K, ordered by salary descending.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE 'K%' ORDER BY SAL DESC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-81</td><td>5000</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">49. Display employees whose name contains L, ordered by name and salary.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE ENAME LIKE '%L%' ORDER BY ENAME, SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">50. Display employees whose job starts with C, ordered by job.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP WHERE JOB LIKE 'C%' ORDER BY JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

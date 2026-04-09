@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - DDL Commands</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 {
+            margin: 5px 0;
+            font-size: 26px;
+            color: #2c3e50;
+        }
+        .header h2 {
+            margin: 5px 0;
+            font-size: 20px;
+            font-weight: normal;
+        }
+        .header h3 {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #555;
+        }
+        .student-info {
+            text-align: right;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .student-info p {
+            margin: 2px 0;
+            font-weight: 600;
+        }
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .query {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            overflow-x: auto;
+            margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .output-text {
+            background-color: #f4f6f7;
+            color: #2c3e50;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            border-radius: 0 4px 4px 0;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            margin: 0;
+            white-space: pre;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: Data Definition Language (DDL) Commands</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Create a table called STUDENT with columns: SID (NUMBER), SNAME (VARCHAR2(30)), AGE (NUMBER), COURSE (VARCHAR2(20))</div>
+        <pre class="query">CREATE TABLE STUDENT (
+    SID NUMBER,
+    SNAME VARCHAR2(30),
+    AGE NUMBER,
+    COURSE VARCHAR2(20)
+);
+DESC STUDENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT created.
+
+Name     Null?    Type
+-------- -------- -----------------
+SID               NUMBER
+SNAME             VARCHAR2(30)
+AGE               NUMBER
+COURSE            VARCHAR2(20)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Create a table EMPLOYEE with columns: EID NUMBER, ENAME VARCHAR2(40), SALARY NUMBER(8,2), DEPTNO NUMBER</div>
+        <pre class="query">CREATE TABLE EMPLOYEE (
+    EID NUMBER,
+    ENAME VARCHAR2(40),
+    SALARY NUMBER(8,2),
+    DEPTNO NUMBER
+);
+DESC EMPLOYEE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMPLOYEE created.
+
+Name     Null?    Type
+-------- -------- -----------------
+EID               NUMBER
+ENAME             VARCHAR2(40)
+SALARY            NUMBER(8,2)
+DEPTNO            NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Create a table DEPARTMENT with columns: DEPTNO NUMBER, DNAME VARCHAR2(30), LOCATION VARCHAR2(30)</div>
+        <pre class="query">CREATE TABLE DEPARTMENT (
+    DEPTNO NUMBER,
+    DNAME VARCHAR2(30),
+    LOCATION VARCHAR2(30)
+);
+DESC DEPARTMENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table DEPARTMENT created.
+
+Name       Null?    Type
+---------- -------- -----------------
+DEPTNO              NUMBER
+DNAME               VARCHAR2(30)
+LOCATION            VARCHAR2(30)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Create a table BOOK with columns: BOOK_ID NUMBER, TITLE VARCHAR2(50), AUTHOR VARCHAR2(40), PRICE NUMBER</div>
+        <pre class="query">CREATE TABLE BOOK (
+    BOOK_ID NUMBER,
+    TITLE VARCHAR2(50),
+    AUTHOR VARCHAR2(40),
+    PRICE NUMBER
+);
+DESC BOOK;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table BOOK created.
+
+Name       Null?    Type
+---------- -------- -----------------
+BOOK_ID             NUMBER
+TITLE               VARCHAR2(50)
+AUTHOR              VARCHAR2(40)
+PRICE               NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Create a table COURSE with columns: CID NUMBER, CNAME VARCHAR2(40), DURATION NUMBER</div>
+        <pre class="query">CREATE TABLE COURSE (
+    CID NUMBER,
+    CNAME VARCHAR2(40),
+    DURATION NUMBER
+);
+DESC COURSE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table COURSE created.
+
+Name       Null?    Type
+---------- -------- -----------------
+CID                 NUMBER
+CNAME               VARCHAR2(40)
+DURATION            NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Create a table PROJECT with columns: PID NUMBER, PNAME VARCHAR2(50), START_DATE DATE, END_DATE DATE</div>
+        <pre class="query">CREATE TABLE PROJECT (
+    PID NUMBER,
+    PNAME VARCHAR2(50),
+    START_DATE DATE,
+    END_DATE DATE
+);
+DESC PROJECT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table PROJECT created.
+
+Name         Null?    Type
+------------ -------- -----------------
+PID                   NUMBER
+PNAME                 VARCHAR2(50)
+START_DATE            DATE
+END_DATE              DATE</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Create a table CUSTOMER with columns: CID NUMBER, CNAME VARCHAR2(40), CITY VARCHAR2(30), PHONE NUMBER</div>
+        <pre class="query">CREATE TABLE CUSTOMER (
+    CID NUMBER,
+    CNAME VARCHAR2(40),
+    CITY VARCHAR2(30),
+    PHONE NUMBER
+);
+DESC CUSTOMER;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table CUSTOMER created.
+
+Name       Null?    Type
+---------- -------- -----------------
+CID                 NUMBER
+CNAME               VARCHAR2(40)
+CITY                VARCHAR2(30)
+PHONE               NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Create a table SALES with columns: SALE_ID NUMBER, PRODUCT_NAME VARCHAR2(50), QUANTITY NUMBER, PRICE NUMBER</div>
+        <pre class="query">CREATE TABLE SALES (
+    SALE_ID NUMBER,
+    PRODUCT_NAME VARCHAR2(50),
+    QUANTITY NUMBER,
+    PRICE NUMBER
+);
+DESC SALES;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table SALES created.
+
+Name           Null?    Type
+-------------- -------- -----------------
+SALE_ID                 NUMBER
+PRODUCT_NAME            VARCHAR2(50)
+QUANTITY                NUMBER
+PRICE                   NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Create a table EMP_COPY from the existing EMP table (structure only)</div>
+        <pre class="query">CREATE TABLE EMP_COPY AS 
+SELECT * FROM SCOTT.EMP WHERE 1=2;
+DESC EMP_COPY;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMP_COPY created.
+
+Name       Null?    Type
+---------- -------- -----------------
+EMPNO      NOT NULL NUMBER(4)
+ENAME               VARCHAR2(10)
+JOB                 VARCHAR2(9)
+MGR                 NUMBER(4)
+HIREDATE            DATE
+SAL                 NUMBER(7,2)
+COMM                NUMBER(7,2)
+DEPTNO              NUMBER(2)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Create a table EMP_BACKUP from EMP including data</div>
+        <pre class="query">CREATE TABLE EMP_BACKUP AS 
+SELECT * FROM SCOTT.EMP;
+DESC EMP_BACKUP;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMP_BACKUP created.
+
+Name       Null?    Type
+---------- -------- -----------------
+EMPNO      NOT NULL NUMBER(4)
+ENAME               VARCHAR2(10)
+JOB                 VARCHAR2(9)
+MGR                 NUMBER(4)
+HIREDATE            DATE
+SAL                 NUMBER(7,2)
+COMM                NUMBER(7,2)
+DEPTNO              NUMBER(2)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Add a column EMAIL VARCHAR2(50) to the STUDENT table</div>
+        <pre class="query">ALTER TABLE STUDENT ADD EMAIL VARCHAR2(50);
+DESC STUDENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT altered.
+
+Name     Null?    Type
+-------- -------- -----------------
+SID               NUMBER
+SNAME             VARCHAR2(30)
+AGE               NUMBER
+COURSE            VARCHAR2(20)
+EMAIL             VARCHAR2(50)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Add a column PHONE NUMBER to the EMPLOYEE table</div>
+        <pre class="query">ALTER TABLE EMPLOYEE ADD PHONE NUMBER;
+DESC EMPLOYEE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMPLOYEE altered.
+
+Name     Null?    Type
+-------- -------- -----------------
+EID               NUMBER
+ENAME             VARCHAR2(40)
+SALARY            NUMBER(8,2)
+DEPTNO            NUMBER
+PHONE             NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Modify the column SNAME in STUDENT table to VARCHAR2(50)</div>
+        <pre class="query">ALTER TABLE STUDENT MODIFY SNAME VARCHAR2(50);
+DESC STUDENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT altered.
+
+Name     Null?    Type
+-------- -------- -----------------
+SID               NUMBER
+SNAME             VARCHAR2(50)
+AGE               NUMBER
+COURSE            VARCHAR2(20)
+EMAIL             VARCHAR2(50)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Modify the column SALARY in EMPLOYEE table to NUMBER(10,2)</div>
+        <pre class="query">ALTER TABLE EMPLOYEE MODIFY SALARY NUMBER(10,2);
+DESC EMPLOYEE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMPLOYEE altered.
+
+Name     Null?    Type
+-------- -------- -----------------
+EID               NUMBER
+ENAME             VARCHAR2(40)
+SALARY            NUMBER(10,2)
+DEPTNO            NUMBER
+PHONE             NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Add two columns CITY VARCHAR2(30) and PINCODE NUMBER to CUSTOMER table</div>
+        <pre class="query">ALTER TABLE CUSTOMER ADD (
+    CITY VARCHAR2(30), 
+    PINCODE NUMBER
+);
+DESC CUSTOMER;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table CUSTOMER altered.
+
+Name       Null?    Type
+---------- -------- -----------------
+CID                 NUMBER
+CNAME               VARCHAR2(40)
+CITY                VARCHAR2(30)
+PHONE               NUMBER
+PINCODE             NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Rename the column SNAME to STUDENT_NAME in STUDENT table</div>
+        <pre class="query">ALTER TABLE STUDENT RENAME COLUMN SNAME TO STUDENT_NAME;
+DESC STUDENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT altered.
+
+Name           Null?    Type
+-------------- -------- -----------------
+SID                     NUMBER
+STUDENT_NAME            VARCHAR2(50)
+AGE                     NUMBER
+COURSE                  VARCHAR2(20)
+EMAIL                   VARCHAR2(50)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Drop the column AGE from STUDENT table</div>
+        <pre class="query">ALTER TABLE STUDENT DROP COLUMN AGE;
+DESC STUDENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT altered.
+
+Name           Null?    Type
+-------------- -------- -----------------
+SID                     NUMBER
+STUDENT_NAME            VARCHAR2(50)
+COURSE                  VARCHAR2(20)
+EMAIL                   VARCHAR2(50)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Set the column SALARY in EMPLOYEE table to NOT NULL</div>
+        <pre class="query">ALTER TABLE EMPLOYEE MODIFY SALARY NOT NULL;
+DESC EMPLOYEE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMPLOYEE altered.
+
+Name     Null?    Type
+-------- -------- -----------------
+EID               NUMBER
+ENAME             VARCHAR2(40)
+SALARY   NOT NULL NUMBER(10,2)
+DEPTNO            NUMBER
+PHONE             NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Increase the size of column TITLE in BOOK table to VARCHAR2(100)</div>
+        <pre class="query">ALTER TABLE BOOK MODIFY TITLE VARCHAR2(100);
+DESC BOOK;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table BOOK altered.
+
+Name       Null?    Type
+---------- -------- -----------------
+BOOK_ID             NUMBER
+TITLE               VARCHAR2(100)
+AUTHOR              VARCHAR2(40)
+PRICE               NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Add a column MANAGER_ID NUMBER to EMPLOYEE table</div>
+        <pre class="query">ALTER TABLE EMPLOYEE ADD MANAGER_ID NUMBER;
+DESC EMPLOYEE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMPLOYEE altered.
+
+Name       Null?    Type
+---------- -------- -----------------
+EID                 NUMBER
+ENAME               VARCHAR2(40)
+SALARY     NOT NULL NUMBER(10,2)
+DEPTNO              NUMBER
+PHONE               NUMBER
+MANAGER_ID          NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Drop the table STUDENT</div>
+        <pre class="query">DROP TABLE STUDENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT dropped.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Drop the table CUSTOMER from the database</div>
+        <pre class="query">DROP TABLE CUSTOMER;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table CUSTOMER dropped.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Drop the table PROJECT permanently</div>
+        <pre class="query">DROP TABLE PROJECT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table PROJECT dropped.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Remove the table SALES</div>
+        <pre class="query">DROP TABLE SALES;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table SALES dropped.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Drop the table COURSE</div>
+        <pre class="query">DROP TABLE COURSE;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table COURSE dropped.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Rename the table STUDENT to STUDENTS (Assuming we recreated it for this question)</div>
+        <pre class="query">RENAME STUDENT TO STUDENTS;
+DESC STUDENTS;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT renamed.
+
+Name           Null?    Type
+-------------- -------- -----------------
+SID                     NUMBER
+STUDENT_NAME            VARCHAR2(50)
+COURSE                  VARCHAR2(20)
+EMAIL                   VARCHAR2(50)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Rename the table EMPLOYEE to EMP_MASTER</div>
+        <pre class="query">RENAME EMPLOYEE TO EMP_MASTER;
+DESC EMP_MASTER;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMPLOYEE renamed.
+
+Name       Null?    Type
+---------- -------- -----------------
+EID                 NUMBER
+ENAME               VARCHAR2(40)
+SALARY     NOT NULL NUMBER(10,2)
+DEPTNO              NUMBER
+PHONE               NUMBER
+MANAGER_ID          NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Rename the table CUSTOMER to CLIENT (Assuming recreated)</div>
+        <pre class="query">RENAME CUSTOMER TO CLIENT;
+DESC CLIENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table CUSTOMER renamed.
+
+Name       Null?    Type
+---------- -------- -----------------
+CID                 NUMBER
+CNAME               VARCHAR2(40)
+CITY                VARCHAR2(30)
+PHONE               NUMBER
+PINCODE             NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Rename the table BOOK to BOOK_DETAILS</div>
+        <pre class="query">RENAME BOOK TO BOOK_DETAILS;
+DESC BOOK_DETAILS;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table BOOK renamed.
+
+Name       Null?    Type
+---------- -------- -----------------
+BOOK_ID             NUMBER
+TITLE               VARCHAR2(100)
+AUTHOR              VARCHAR2(40)
+PRICE               NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Rename the table PROJECT to PROJECT_INFO (Assuming recreated)</div>
+        <pre class="query">RENAME PROJECT TO PROJECT_INFO;
+DESC PROJECT_INFO;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table PROJECT renamed.
+
+Name         Null?    Type
+------------ -------- -----------------
+PID                   NUMBER
+PNAME                 VARCHAR2(50)
+START_DATE            DATE
+END_DATE              DATE</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Remove all records from the STUDENT table</div>
+        <pre class="query">TRUNCATE TABLE STUDENTS;
+SELECT * FROM STUDENTS;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENTS truncated.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Delete all rows from EMPLOYEE table using TRUNCATE</div>
+        <pre class="query">TRUNCATE TABLE EMP_MASTER;
+SELECT * FROM EMP_MASTER;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMP_MASTER truncated.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">33. Empty the CUSTOMER table quickly</div>
+        <pre class="query">TRUNCATE TABLE CLIENT;
+SELECT * FROM CLIENT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table CLIENT truncated.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">34. Remove all data from SALES table but keep structure</div>
+        <pre class="query">TRUNCATE TABLE SALES;
+SELECT * FROM SALES;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table SALES truncated.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">35. Clear the PROJECT table</div>
+        <pre class="query">TRUNCATE TABLE PROJECT_INFO;
+SELECT * FROM PROJECT_INFO;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table PROJECT_INFO truncated.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">36. Create a table TRAINING with columns TID, TNAME, DURATION</div>
+        <pre class="query">CREATE TABLE TRAINING (
+    TID NUMBER,
+    TNAME VARCHAR2(30),
+    DURATION NUMBER
+);
+DESC TRAINING;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table TRAINING created.
+
+Name       Null?    Type
+---------- -------- -----------------
+TID                 NUMBER
+TNAME               VARCHAR2(30)
+DURATION            NUMBER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">37. Add column TRAINER_NAME VARCHAR2(40) to TRAINING</div>
+        <pre class="query">ALTER TABLE TRAINING ADD TRAINER_NAME VARCHAR2(40);
+DESC TRAINING;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table TRAINING altered.
+
+Name         Null?    Type
+------------ -------- -----------------
+TID                   NUMBER
+TNAME                 VARCHAR2(30)
+DURATION              NUMBER
+TRAINER_NAME          VARCHAR2(40)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">38. Modify TNAME column size to VARCHAR2(60)</div>
+        <pre class="query">ALTER TABLE TRAINING MODIFY TNAME VARCHAR2(60);
+DESC TRAINING;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table TRAINING altered.
+
+Name         Null?    Type
+------------ -------- -----------------
+TID                   NUMBER
+TNAME                 VARCHAR2(60)
+DURATION              NUMBER
+TRAINER_NAME          VARCHAR2(40)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">39. Rename the TRAINING table to TRAINING_PROGRAM</div>
+        <pre class="query">RENAME TRAINING TO TRAINING_PROGRAM;
+DESC TRAINING_PROGRAM;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table TRAINING renamed.
+
+Name         Null?    Type
+------------ -------- -----------------
+TID                   NUMBER
+TNAME                 VARCHAR2(60)
+DURATION              NUMBER
+TRAINER_NAME          VARCHAR2(40)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">40. Truncate the TRAINING_PROGRAM table</div>
+        <pre class="query">TRUNCATE TABLE TRAINING_PROGRAM;
+SELECT * FROM TRAINING_PROGRAM;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table TRAINING_PROGRAM truncated.
+
+no rows selected.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">41. Drop the TRAINING_PROGRAM table</div>
+        <pre class="query">DROP TABLE TRAINING_PROGRAM;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table TRAINING_PROGRAM dropped.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">42. Create a table EMP_PROJECT with columns EMP_ID NUMBER, PROJECT_ID NUMBER, START_DATE DATE, END_DATE DATE, ROLE VARCHAR2(30). Later modify ROLE to VARCHAR2(50) and add STATUS VARCHAR2(20)</div>
+        <pre class="query">CREATE TABLE EMP_PROJECT (
+    EMP_ID NUMBER,
+    PROJECT_ID NUMBER,
+    START_DATE DATE,
+    END_DATE DATE,
+    ROLE VARCHAR2(30)
+);
+ALTER TABLE EMP_PROJECT MODIFY ROLE VARCHAR2(50);
+ALTER TABLE EMP_PROJECT ADD STATUS VARCHAR2(20);
+DESC EMP_PROJECT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMP_PROJECT created.
+Table EMP_PROJECT altered.
+Table EMP_PROJECT altered.
+
+Name         Null?    Type
+------------ -------- -----------------
+EMP_ID                NUMBER
+PROJECT_ID            NUMBER
+START_DATE            DATE
+END_DATE              DATE
+ROLE                  VARCHAR2(50)
+STATUS                VARCHAR2(20)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">43. Create a table PRODUCT with columns PID NUMBER, PNAME VARCHAR2(50), PRICE NUMBER, CATEGORY VARCHAR2(30). Then rename PNAME to PRODUCT_NAME and change PRICE datatype to NUMBER(10,2)</div>
+        <pre class="query">CREATE TABLE PRODUCT (
+    PID NUMBER,
+    PNAME VARCHAR2(50),
+    PRICE NUMBER,
+    CATEGORY VARCHAR2(30)
+);
+ALTER TABLE PRODUCT RENAME COLUMN PNAME TO PRODUCT_NAME;
+ALTER TABLE PRODUCT MODIFY PRICE NUMBER(10,2);
+DESC PRODUCT;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table PRODUCT created.
+Table PRODUCT altered.
+Table PRODUCT altered.
+
+Name           Null?    Type
+-------------- -------- -----------------
+PID                     NUMBER
+PRODUCT_NAME            VARCHAR2(50)
+PRICE                   NUMBER(10,2)
+CATEGORY                VARCHAR2(30)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">44. Create a table ORDERS... After creation: Add STATUS, Drop TOTAL_AMOUNT, Add TOTAL_AMOUNT NUMBER(10,2)</div>
+        <pre class="query">CREATE TABLE ORDERS (
+    ORDER_ID NUMBER,
+    CUSTOMER_ID NUMBER,
+    ORDER_DATE DATE,
+    TOTAL_AMOUNT NUMBER
+);
+ALTER TABLE ORDERS ADD STATUS VARCHAR2(20);
+ALTER TABLE ORDERS DROP COLUMN TOTAL_AMOUNT;
+ALTER TABLE ORDERS ADD TOTAL_AMOUNT NUMBER(10,2);
+DESC ORDERS;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table ORDERS created.
+Table ORDERS altered.
+Table ORDERS altered.
+Table ORDERS altered.
+
+Name           Null?    Type
+-------------- -------- -----------------
+ORDER_ID                NUMBER
+CUSTOMER_ID             NUMBER
+ORDER_DATE              DATE
+STATUS                  VARCHAR2(20)
+TOTAL_AMOUNT            NUMBER(10,2)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">45. Create EMP_TEMP from EMP (salary > 2000). Then: Rename to EMP_HIGH_SALARY, Truncate, Drop.</div>
+        <pre class="query">CREATE TABLE EMP_TEMP AS 
+SELECT * FROM SCOTT.EMP WHERE SAL > 2000;
+RENAME EMP_TEMP TO EMP_HIGH_SALARY;
+TRUNCATE TABLE EMP_HIGH_SALARY;
+DROP TABLE EMP_HIGH_SALARY;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMP_TEMP created.
+Table EMP_TEMP renamed.
+Table EMP_HIGH_SALARY truncated.
+Table EMP_HIGH_SALARY dropped.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">46. Create STUDENT_RECORD... Add GRADE, Modify MARKS to NUMBER(5,2), Rename COURSE to COURSE_NAME</div>
+        <pre class="query">CREATE TABLE STUDENT_RECORD (
+    SID NUMBER,
+    SNAME VARCHAR2(40),
+    COURSE VARCHAR2(30),
+    MARKS NUMBER
+);
+ALTER TABLE STUDENT_RECORD ADD GRADE CHAR(1);
+ALTER TABLE STUDENT_RECORD MODIFY MARKS NUMBER(5,2);
+ALTER TABLE STUDENT_RECORD RENAME COLUMN COURSE TO COURSE_NAME;
+DESC STUDENT_RECORD;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table STUDENT_RECORD created.
+Table STUDENT_RECORD altered.
+Table STUDENT_RECORD altered.
+Table STUDENT_RECORD altered.
+
+Name           Null?    Type
+-------------- -------- -----------------
+SID                     NUMBER
+SNAME                   VARCHAR2(40)
+COURSE_NAME             VARCHAR2(30)
+MARKS                   NUMBER(5,2)
+GRADE                   CHAR(1)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">47. Create EMP_ARCHIVE (structure only). Add ARCHIVE_DATE, Rename to EMP_HISTORY</div>
+        <pre class="query">CREATE TABLE EMP_ARCHIVE AS 
+SELECT * FROM SCOTT.EMP WHERE 1=2;
+ALTER TABLE EMP_ARCHIVE ADD ARCHIVE_DATE DATE;
+RENAME EMP_ARCHIVE TO EMP_HISTORY;
+DESC EMP_HISTORY;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table EMP_ARCHIVE created.
+Table EMP_ARCHIVE altered.
+Table EMP_ARCHIVE renamed.
+
+Name           Null?    Type
+-------------- -------- -----------------
+EMPNO          NOT NULL NUMBER(4)
+ENAME                   VARCHAR2(10)
+JOB                     VARCHAR2(9)
+MGR                     NUMBER(4)
+HIREDATE                DATE
+SAL                     NUMBER(7,2)
+COMM                    NUMBER(7,2)
+DEPTNO                  NUMBER(2)
+ARCHIVE_DATE            DATE</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">48. Create DEPT_BACKUP with all rows. Drop LOC, Add LOCATION VARCHAR2(40)</div>
+        <pre class="query">CREATE TABLE DEPT_BACKUP AS 
+SELECT * FROM SCOTT.DEPT;
+ALTER TABLE DEPT_BACKUP DROP COLUMN LOC;
+ALTER TABLE DEPT_BACKUP ADD LOCATION VARCHAR2(40);
+DESC DEPT_BACKUP;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table DEPT_BACKUP created.
+Table DEPT_BACKUP altered.
+Table DEPT_BACKUP altered.
+
+Name       Null?    Type
+---------- -------- -----------------
+DEPTNO              NUMBER(2)
+DNAME               VARCHAR2(14)
+LOCATION            VARCHAR2(40)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">49. Create SALES_DATA... Add REGION, Modify AMOUNT, Rename to REGIONAL_SALES_DATA</div>
+        <pre class="query">CREATE TABLE SALES_DATA (
+    SALE_ID NUMBER,
+    PRODUCT_ID NUMBER,
+    SALE_DATE DATE,
+    AMOUNT NUMBER
+);
+ALTER TABLE SALES_DATA ADD REGION VARCHAR2(30);
+ALTER TABLE SALES_DATA MODIFY AMOUNT NUMBER(12,2);
+RENAME SALES_DATA TO REGIONAL_SALES_DATA;
+DESC REGIONAL_SALES_DATA;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table SALES_DATA created.
+Table SALES_DATA altered.
+Table SALES_DATA altered.
+Table SALES_DATA renamed.
+
+Name         Null?    Type
+------------ -------- -----------------
+SALE_ID               NUMBER
+PRODUCT_ID            NUMBER
+SALE_DATE             DATE
+AMOUNT                NUMBER(12,2)
+REGION                VARCHAR2(30)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">50. Create LOG_TABLE... Truncate, Rename to SYSTEM_LOG, Drop permanently</div>
+        <pre class="query">CREATE TABLE LOG_TABLE (
+    LOG_ID NUMBER,
+    USER_NAME VARCHAR2(30),
+    ACTION VARCHAR2(50),
+    LOG_DATE DATE
+);
+TRUNCATE TABLE LOG_TABLE;
+RENAME LOG_TABLE TO SYSTEM_LOG;
+DROP TABLE SYSTEM_LOG;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Table LOG_TABLE created.
+Table LOG_TABLE truncated.
+Table LOG_TABLE renamed.
+Table SYSTEM_LOG dropped.</pre>
+    </div>
+
+</body>
+</html>

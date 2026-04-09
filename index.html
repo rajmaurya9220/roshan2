@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DBMS Portal | Aurora Edition</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Lexend:wght@300;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --base: #0a0f1d;
+        --card-bg: #161d31;
+        --accent: #7367f0; /* Electric Violet */
+        --cyan: #00cfe8;
+        --text-main: #d0d2d6;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--base);
+        font-family: "Lexend", sans-serif;
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+      }
+
+      /* DYNAMIC AURORA BACKGROUND */
+      .aurora-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(115, 103, 240, 0.15) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(0, 207, 232, 0.1) 0%,
+            transparent 40%
+          );
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1000px;
+        padding: 60px 0;
+      }
+
+      /* HEADER AREA */
+      header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .main-title {
+        font-family: "Outfit", sans-serif;
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 900;
+        margin: 0;
+        background: linear-gradient(
+          135deg,
+          #fff 30%,
+          var(--accent),
+          var(--cyan)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+      }
+
+      /* USER INFO */
+      .user-info {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 40px;
+      }
+
+      .info-box {
+        background: var(--card-bg);
+        padding: 12px 20px;
+        border-radius: 12px;
+        border-bottom: 3px solid var(--accent);
+        font-size: 0.85rem;
+        transition: 0.3s;
+      }
+      .info-box:hover {
+        transform: translateY(-5px);
+        border-color: var(--cyan);
+      }
+      .info-box span {
+        color: var(--cyan);
+        font-weight: 600;
+        margin-right: 5px;
+      }
+
+      /* CONTENT CARDS */
+      .portal-grid {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        width: 400px;
+        padding: 35px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Glow effect on hover */
+      .card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: var(--accent);
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.4),
+          0 0 20px rgba(115, 103, 240, 0.2);
+      }
+
+      .card-head {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .icon-label {
+        background: linear-gradient(135deg, var(--accent), var(--cyan));
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        margin-right: 15px;
+      }
+
+      .card h2 {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        font-size: 1.6rem;
+        color: #fff;
+      }
+
+      /* TOPICS LIST */
+      .topic-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .topic-list li {
+        padding: 10px 0;
+        font-size: 0.9rem;
+        color: #b4b7bd;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        display: flex;
+        align-items: center;
+      }
+
+      .topic-list li:last-child {
+        border: none;
+      }
+
+      .topic-list li::before {
+        content: "●";
+        color: var(--accent);
+        font-size: 0.6rem;
+        margin-right: 12px;
+      }
+
+      .enter-btn {
+        margin-top: 25px;
+        display: block;
+        width: fit-content;
+        padding: 10px 25px;
+        background: rgba(115, 103, 240, 0.1);
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        transition: 0.3s;
+      }
+
+      .card:hover .enter-btn {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 40px;
+        font-size: 0.7rem;
+        color: #676d7d;
+        letter-spacing: 2px;
+      }
+
+      @media (max-width: 850px) {
+        .portal-grid {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="aurora-bg"></div>
+
+    <div class="container">
+      <header>
+        <h1 class="main-title">Database Management<br />System</h1>
+      </header>
+
+      <div class="user-info">
+        <div class="info-box"><span>Name :</span> Roshan Das</div>
+        <div class="info-box"><span>Class :</span> BCA IV SEM</div>
+        <div class="info-box"><span>Roll No. :</span> 7075/24</div>
+        <div class="info-box"><span>Submitted To :</span> Mr. Chetan Gupta</div>
+      </div>
+
+      <div class="portal-grid">
+        <a href="sql.html" class="card">
+          <div class="card-head">
+            <div class="icon-label">SQL</div>
+            <h2>Structured Query Language</h2>
+          </div>
+          <ul class="topic-list">
+            <li>DDL, DML, DCL Operations</li>
+            <li>Complex Joins (Inner, Outer, Self)</li>
+            <li>Sub-queries & Nested Logic</li>
+            <li>Views, Synonyms & Sequences</li>
+            <li>Integrity Constraints & Keys</li>
+          </ul>
+          <div class="enter-btn">View Sql Query</div>
+        </a>
+
+        <a href="plsql.html" class="card">
+          <div class="card-head">
+            <div class="icon-label">Pl/Sql</div>
+            <h2>Procedural SQL</h2>
+          </div>
+          <ul class="topic-list">
+            <li>Pl/SQL Architecture & Blocks</li>
+            <li>Cursors (Static & Dynamic)</li>
+            <li>Exception Handling Patterns</li>
+            <li>Stored Procedures & Functions</li>
+            <li>Triggers & Package Design</li>
+          </ul>
+          <div class="enter-btn">View PL/SQL Query</div>
+        </a>
+      </div>
+    </div>
+
+    <footer>Made by Roshan Das</footer>
+  </body>
+</html>

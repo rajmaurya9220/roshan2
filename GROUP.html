@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - Group Functions & GROUP BY</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 900px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: Group Functions, GROUP BY, and HAVING Clause</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Display the total number of employees.</div>
+        <pre class="query">SELECT COUNT(*) AS TOTAL_EMPLOYEES FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>TOTAL_EMPLOYEES</th></tr>
+            <tr><td>14</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Display the total salary of all employees.</div>
+        <pre class="query">SELECT SUM(SAL) AS TOTAL_SALARY FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>TOTAL_SALARY</th></tr>
+            <tr><td>29025</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Display the average salary of all employees.</div>
+        <pre class="query">SELECT ROUND(AVG(SAL), 2) AS AVERAGE_SALARY FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>AVERAGE_SALARY</th></tr>
+            <tr><td>2073.21</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Display the highest salary.</div>
+        <pre class="query">SELECT MAX(SAL) AS HIGHEST_SALARY FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>HIGHEST_SALARY</th></tr>
+            <tr><td>5000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Display the lowest salary.</div>
+        <pre class="query">SELECT MIN(SAL) AS LOWEST_SALARY FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>LOWEST_SALARY</th></tr>
+            <tr><td>800</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Display the total number of departments in EMP table.</div>
+        <pre class="query">SELECT COUNT(DISTINCT DEPTNO) AS TOTAL_DEPARTMENTS FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>TOTAL_DEPARTMENTS</th></tr>
+            <tr><td>3</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Display the number of employees who are managers.</div>
+        <pre class="query">SELECT COUNT(*) AS MANAGER_COUNT FROM SCOTT.EMP WHERE JOB = 'MANAGER';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>MANAGER_COUNT</th></tr>
+            <tr><td>3</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Display the total commission paid to employees.</div>
+        <pre class="query">SELECT SUM(COMM) AS TOTAL_COMMISSION FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>TOTAL_COMMISSION</th></tr>
+            <tr><td>2200</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Display the average commission.</div>
+        <pre class="query">SELECT AVG(COMM) AS AVERAGE_COMMISSION FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>AVERAGE_COMMISSION</th></tr>
+            <tr><td>550</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Display the number of employees who are getting commission.</div>
+        <pre class="query">SELECT COUNT(COMM) AS EMP_GETTING_COMM FROM SCOTT.EMP WHERE COMM > 0;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMP_GETTING_COMM</th></tr>
+            <tr><td>3</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Display department-wise total salary.</div>
+        <pre class="query">SELECT DEPTNO, SUM(SAL) AS TOTAL_SALARY FROM SCOTT.EMP GROUP BY DEPTNO ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>TOTAL_SALARY</th></tr>
+            <tr><td>10</td><td>8750</td></tr>
+            <tr><td>20</td><td>10875</td></tr>
+            <tr><td>30</td><td>9400</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Display department-wise average salary.</div>
+        <pre class="query">SELECT DEPTNO, ROUND(AVG(SAL), 2) AS AVG_SALARY FROM SCOTT.EMP GROUP BY DEPTNO ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>AVG_SALARY</th></tr>
+            <tr><td>10</td><td>2916.67</td></tr>
+            <tr><td>20</td><td>2175</td></tr>
+            <tr><td>30</td><td>1566.67</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Display department-wise number of employees.</div>
+        <pre class="query">SELECT DEPTNO, COUNT(*) AS EMP_COUNT FROM SCOTT.EMP GROUP BY DEPTNO ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>EMP_COUNT</th></tr>
+            <tr><td>10</td><td>3</td></tr>
+            <tr><td>20</td><td>5</td></tr>
+            <tr><td>30</td><td>6</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Display job-wise number of employees.</div>
+        <pre class="query">SELECT JOB, COUNT(*) AS EMP_COUNT FROM SCOTT.EMP GROUP BY JOB ORDER BY JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>EMP_COUNT</th></tr>
+            <tr><td>ANALYST</td><td>2</td></tr>
+            <tr><td>CLERK</td><td>4</td></tr>
+            <tr><td>MANAGER</td><td>3</td></tr>
+            <tr><td>PRESIDENT</td><td>1</td></tr>
+            <tr><td>SALESMAN</td><td>4</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Display job-wise total salary.</div>
+        <pre class="query">SELECT JOB, SUM(SAL) AS TOTAL_SALARY FROM SCOTT.EMP GROUP BY JOB ORDER BY JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>TOTAL_SALARY</th></tr>
+            <tr><td>ANALYST</td><td>6000</td></tr>
+            <tr><td>CLERK</td><td>4150</td></tr>
+            <tr><td>MANAGER</td><td>8275</td></tr>
+            <tr><td>PRESIDENT</td><td>5000</td></tr>
+            <tr><td>SALESMAN</td><td>5600</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Display job-wise maximum salary.</div>
+        <pre class="query">SELECT JOB, MAX(SAL) AS MAX_SALARY FROM SCOTT.EMP GROUP BY JOB ORDER BY JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>MAX_SALARY</th></tr>
+            <tr><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>CLERK</td><td>1300</td></tr>
+            <tr><td>MANAGER</td><td>2975</td></tr>
+            <tr><td>PRESIDENT</td><td>5000</td></tr>
+            <tr><td>SALESMAN</td><td>1600</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Display job-wise minimum salary.</div>
+        <pre class="query">SELECT JOB, MIN(SAL) AS MIN_SALARY FROM SCOTT.EMP GROUP BY JOB ORDER BY JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>MIN_SALARY</th></tr>
+            <tr><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>CLERK</td><td>800</td></tr>
+            <tr><td>MANAGER</td><td>2450</td></tr>
+            <tr><td>PRESIDENT</td><td>5000</td></tr>
+            <tr><td>SALESMAN</td><td>1250</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Display department-wise maximum salary.</div>
+        <pre class="query">SELECT DEPTNO, MAX(SAL) AS MAX_SALARY FROM SCOTT.EMP GROUP BY DEPTNO ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>MAX_SALARY</th></tr>
+            <tr><td>10</td><td>5000</td></tr>
+            <tr><td>20</td><td>3000</td></tr>
+            <tr><td>30</td><td>2850</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Display department-wise minimum salary.</div>
+        <pre class="query">SELECT DEPTNO, MIN(SAL) AS MIN_SALARY FROM SCOTT.EMP GROUP BY DEPTNO ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>MIN_SALARY</th></tr>
+            <tr><td>10</td><td>1300</td></tr>
+            <tr><td>20</td><td>800</td></tr>
+            <tr><td>30</td><td>950</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Display department-wise average commission.</div>
+        <pre class="query">SELECT DEPTNO, AVG(COMM) AS AVG_COMM FROM SCOTT.EMP GROUP BY DEPTNO ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>AVG_COMM</th></tr>
+            <tr><td>10</td><td>-</td></tr>
+            <tr><td>20</td><td>-</td></tr>
+            <tr><td>30</td><td>550</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Display department-wise job-wise number of employees.</div>
+        <pre class="query">SELECT DEPTNO, JOB, COUNT(*) AS EMP_COUNT FROM SCOTT.EMP GROUP BY DEPTNO, JOB ORDER BY DEPTNO, JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>JOB</th><th>EMP_COUNT</th></tr>
+            <tr><td>10</td><td>CLERK</td><td>1</td></tr>
+            <tr><td>10</td><td>MANAGER</td><td>1</td></tr>
+            <tr><td>10</td><td>PRESIDENT</td><td>1</td></tr>
+            <tr><td>20</td><td>ANALYST</td><td>2</td></tr>
+            <tr><td>20</td><td>CLERK</td><td>2</td></tr>
+            <tr><td>20</td><td>MANAGER</td><td>1</td></tr>
+            <tr><td>30</td><td>CLERK</td><td>1</td></tr>
+            <tr><td>30</td><td>MANAGER</td><td>1</td></tr>
+            <tr><td>30</td><td>SALESMAN</td><td>4</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Display department-wise job-wise total salary.</div>
+        <pre class="query">SELECT DEPTNO, JOB, SUM(SAL) AS TOTAL_SALARY FROM SCOTT.EMP GROUP BY DEPTNO, JOB ORDER BY DEPTNO, JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>JOB</th><th>TOTAL_SALARY</th></tr>
+            <tr><td>10</td><td>CLERK</td><td>1300</td></tr>
+            <tr><td>10</td><td>MANAGER</td><td>2450</td></tr>
+            <tr><td>10</td><td>PRESIDENT</td><td>5000</td></tr>
+            <tr><td>20</td><td>ANALYST</td><td>6000</td></tr>
+            <tr><td>20</td><td>CLERK</td><td>1900</td></tr>
+            <tr><td>20</td><td>MANAGER</td><td>2975</td></tr>
+            <tr><td>30</td><td>CLERK</td><td>950</td></tr>
+            <tr><td>30</td><td>MANAGER</td><td>2850</td></tr>
+            <tr><td>30</td><td>SALESMAN</td><td>5600</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Display department-wise job-wise average salary.</div>
+        <pre class="query">SELECT DEPTNO, JOB, ROUND(AVG(SAL), 2) AS AVG_SALARY FROM SCOTT.EMP GROUP BY DEPTNO, JOB ORDER BY DEPTNO, JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>JOB</th><th>AVG_SALARY</th></tr>
+            <tr><td>10</td><td>CLERK</td><td>1300</td></tr>
+            <tr><td>10</td><td>MANAGER</td><td>2450</td></tr>
+            <tr><td>10</td><td>PRESIDENT</td><td>5000</td></tr>
+            <tr><td>20</td><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>20</td><td>CLERK</td><td>950</td></tr>
+            <tr><td>20</td><td>MANAGER</td><td>2975</td></tr>
+            <tr><td>30</td><td>CLERK</td><td>950</td></tr>
+            <tr><td>30</td><td>MANAGER</td><td>2850</td></tr>
+            <tr><td>30</td><td>SALESMAN</td><td>1400</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Display job-wise department-wise maximum salary.</div>
+        <pre class="query">SELECT JOB, DEPTNO, MAX(SAL) AS MAX_SALARY FROM SCOTT.EMP GROUP BY JOB, DEPTNO ORDER BY JOB, DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>DEPTNO</th><th>MAX_SALARY</th></tr>
+            <tr><td>ANALYST</td><td>20</td><td>3000</td></tr>
+            <tr><td>CLERK</td><td>10</td><td>1300</td></tr>
+            <tr><td>CLERK</td><td>20</td><td>1100</td></tr>
+            <tr><td>CLERK</td><td>30</td><td>950</td></tr>
+            <tr><td>MANAGER</td><td>10</td><td>2450</td></tr>
+            <tr><td>MANAGER</td><td>20</td><td>2975</td></tr>
+            <tr><td>MANAGER</td><td>30</td><td>2850</td></tr>
+            <tr><td>PRESIDENT</td><td>10</td><td>5000</td></tr>
+            <tr><td>SALESMAN</td><td>30</td><td>1600</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Display job-wise department-wise minimum salary.</div>
+        <pre class="query">SELECT JOB, DEPTNO, MIN(SAL) AS MIN_SALARY FROM SCOTT.EMP GROUP BY JOB, DEPTNO ORDER BY JOB, DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>DEPTNO</th><th>MIN_SALARY</th></tr>
+            <tr><td>ANALYST</td><td>20</td><td>3000</td></tr>
+            <tr><td>CLERK</td><td>10</td><td>1300</td></tr>
+            <tr><td>CLERK</td><td>20</td><td>800</td></tr>
+            <tr><td>CLERK</td><td>30</td><td>950</td></tr>
+            <tr><td>MANAGER</td><td>10</td><td>2450</td></tr>
+            <tr><td>MANAGER</td><td>20</td><td>2975</td></tr>
+            <tr><td>MANAGER</td><td>30</td><td>2850</td></tr>
+            <tr><td>PRESIDENT</td><td>10</td><td>5000</td></tr>
+            <tr><td>SALESMAN</td><td>30</td><td>1250</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Display department and job having highest total salary.</div>
+        <pre class="query">SELECT DEPTNO, JOB, SUM(SAL) AS TOTAL_SALARY FROM SCOTT.EMP 
+GROUP BY DEPTNO, JOB 
+HAVING SUM(SAL) = (SELECT MAX(SUM(SAL)) FROM SCOTT.EMP GROUP BY DEPTNO, JOB);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>JOB</th><th>TOTAL_SALARY</th></tr>
+            <tr><td>20</td><td>ANALYST</td><td>6000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Display department where sum of salaries is maximum.</div>
+        <pre class="query">SELECT DEPTNO, SUM(SAL) AS MAX_SUM_SAL FROM SCOTT.EMP 
+GROUP BY DEPTNO 
+HAVING SUM(SAL) = (SELECT MAX(SUM(SAL)) FROM SCOTT.EMP GROUP BY DEPTNO);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>MAX_SUM_SAL</th></tr>
+            <tr><td>20</td><td>10875</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Display job having minimum average salary.</div>
+        <pre class="query">SELECT JOB, AVG(SAL) AS MIN_AVG_SAL FROM SCOTT.EMP 
+GROUP BY JOB 
+HAVING AVG(SAL) = (SELECT MIN(AVG(SAL)) FROM SCOTT.EMP GROUP BY JOB);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>MIN_AVG_SAL</th></tr>
+            <tr><td>CLERK</td><td>1037.5</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Display jobs having average salary greater than department-wise average salary.</div>
+        <pre class="query">SELECT JOB, AVG(SAL) AS JOB_AVG FROM SCOTT.EMP 
+GROUP BY JOB 
+HAVING AVG(SAL) > ALL (SELECT AVG(SAL) FROM SCOTT.EMP GROUP BY DEPTNO);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>JOB_AVG</th></tr>
+            <tr><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>PRESIDENT</td><td>5000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Display department having highest number of employees.</div>
+        <pre class="query">SELECT DEPTNO, COUNT(*) AS HIGHEST_EMP FROM SCOTT.EMP 
+GROUP BY DEPTNO 
+HAVING COUNT(*) = (SELECT MAX(COUNT(*)) FROM SCOTT.EMP GROUP BY DEPTNO);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>HIGHEST_EMP</th></tr>
+            <tr><td>30</td><td>6</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Display jobs whose total salary is more than salary of all CLERKs combined.</div>
+        <pre class="query">SELECT JOB, SUM(SAL) FROM SCOTT.EMP 
+GROUP BY JOB 
+HAVING SUM(SAL) > (SELECT SUM(SAL) FROM SCOTT.EMP WHERE JOB = 'CLERK');</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>SUM(SAL)</th></tr>
+            <tr><td>SALESMAN</td><td>5600</td></tr>
+            <tr><td>MANAGER</td><td>8275</td></tr>
+            <tr><td>ANALYST</td><td>6000</td></tr>
+            <tr><td>PRESIDENT</td><td>5000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Display departments having same number of employees.</div>
+        <pre class="query">SELECT DEPTNO, COUNT(*) AS EMP_COUNT FROM SCOTT.EMP 
+GROUP BY DEPTNO 
+HAVING COUNT(*) IN (SELECT COUNT(*) FROM SCOTT.EMP GROUP BY DEPTNO 
+                    GROUP BY COUNT(*) HAVING COUNT(*) > 1);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>EMP_COUNT</th></tr>
+            <tr><td colspan="2">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">33. Display jobs where max salary is equal to department 20 max salary.</div>
+        <pre class="query">SELECT JOB, MAX(SAL) FROM SCOTT.EMP 
+GROUP BY JOB 
+HAVING MAX(SAL) = (SELECT MAX(SAL) FROM SCOTT.EMP WHERE DEPTNO = 20);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>MAX(SAL)</th></tr>
+            <tr><td>ANALYST</td><td>3000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">34. Display department having minimum total salary.</div>
+        <pre class="query">SELECT DEPTNO, SUM(SAL) FROM SCOTT.EMP 
+GROUP BY DEPTNO 
+HAVING SUM(SAL) = (SELECT MIN(SUM(SAL)) FROM SCOTT.EMP GROUP BY DEPTNO);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>SUM(SAL)</th></tr>
+            <tr><td>10</td><td>8750</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">35. Display job having highest average salary.</div>
+        <pre class="query">SELECT JOB, AVG(SAL) FROM SCOTT.EMP 
+GROUP BY JOB 
+HAVING AVG(SAL) = (SELECT MAX(AVG(SAL)) FROM SCOTT.EMP GROUP BY JOB);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>AVG(SAL)</th></tr>
+            <tr><td>PRESIDENT</td><td>5000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">36. Display department number and total salary where average salary is greater than overall average salary.</div>
+        <pre class="query">SELECT DEPTNO, SUM(SAL) AS TOTAL_SALARY FROM SCOTT.EMP 
+GROUP BY DEPTNO 
+HAVING AVG(SAL) > (SELECT AVG(SAL) FROM SCOTT.EMP);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>TOTAL_SALARY</th></tr>
+            <tr><td>10</td><td>8750</td></tr>
+            <tr><td>20</td><td>10875</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">37. Display job-wise count of employees not getting commission.</div>
+        <pre class="query">SELECT JOB, COUNT(*) AS NO_COMM_COUNT FROM SCOTT.EMP 
+WHERE COMM IS NULL OR COMM = 0 
+GROUP BY JOB ORDER BY JOB;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>NO_COMM_COUNT</th></tr>
+            <tr><td>ANALYST</td><td>2</td></tr>
+            <tr><td>CLERK</td><td>4</td></tr>
+            <tr><td>MANAGER</td><td>3</td></tr>
+            <tr><td>PRESIDENT</td><td>1</td></tr>
+            <tr><td>SALESMAN</td><td>1</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">38. Display departments where no employee gets commission.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+GROUP BY DEPTNO 
+HAVING COUNT(COMM) = 0 ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>10</td></tr>
+            <tr><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">39. Display departments where all employees get commission.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+GROUP BY DEPTNO 
+HAVING COUNT(COMM) = COUNT(*);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td colspan="1">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">40. Display job-wise average commission.</div>
+        <pre class="query">SELECT JOB, AVG(COMM) AS AVG_COMM FROM SCOTT.EMP 
+GROUP BY JOB HAVING AVG(COMM) IS NOT NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>AVG_COMM</th></tr>
+            <tr><td>SALESMAN</td><td>550</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">41. Display department-wise count of employees where manager is NULL.</div>
+        <pre class="query">SELECT DEPTNO, COUNT(*) AS MGR_NULL_COUNT FROM SCOTT.EMP 
+WHERE MGR IS NULL GROUP BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>MGR_NULL_COUNT</th></tr>
+            <tr><td>10</td><td>1</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">42. Display number of employees without commission.</div>
+        <pre class="query">SELECT COUNT(*) AS EMP_NO_COMM FROM SCOTT.EMP WHERE COMM IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMP_NO_COMM</th></tr>
+            <tr><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">43. Display total commission paid (ignore NULLs).</div>
+        <pre class="query">SELECT SUM(COMM) AS TOTAL_COMM FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>TOTAL_COMM</th></tr>
+            <tr><td>2200</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">44. Display department-wise average commission excluding NULLs.</div>
+        <pre class="query">SELECT DEPTNO, AVG(COMM) AS AVG_COMM FROM SCOTT.EMP 
+WHERE COMM IS NOT NULL GROUP BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>AVG_COMM</th></tr>
+            <tr><td>30</td><td>550</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">45. Display job-wise total commission.</div>
+        <pre class="query">SELECT JOB, SUM(COMM) AS TOTAL_COMM FROM SCOTT.EMP 
+GROUP BY JOB HAVING SUM(COMM) IS NOT NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>TOTAL_COMM</th></tr>
+            <tr><td>SALESMAN</td><td>2200</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">46. Display department-wise count of employees getting commission.</div>
+        <pre class="query">SELECT DEPTNO, COUNT(COMM) AS EMP_COMM_COUNT FROM SCOTT.EMP 
+WHERE COMM IS NOT NULL GROUP BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>EMP_COMM_COUNT</th></tr>
+            <tr><td>30</td><td>4</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">47. Display jobs having more than one manager.</div>
+        <pre class="query">SELECT JOB FROM SCOTT.EMP 
+WHERE JOB = 'MANAGER' GROUP BY JOB HAVING COUNT(*) > 1;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th></tr>
+            <tr><td>MANAGER</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">48. Display departments having employees with commission.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+GROUP BY DEPTNO HAVING COUNT(COMM) > 0;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">49. Display job-wise average salary where total salary > 5000.</div>
+        <pre class="query">SELECT JOB, ROUND(AVG(SAL), 2) AS AVG_SAL FROM SCOTT.EMP 
+GROUP BY JOB HAVING SUM(SAL) > 5000 ORDER BY AVG_SAL DESC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>AVG_SAL</th></tr>
+            <tr><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>MANAGER</td><td>2758.33</td></tr>
+            <tr><td>SALESMAN</td><td>1400</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">50. Display department-wise total salary where employee count > 4.</div>
+        <pre class="query">SELECT DEPTNO, SUM(SAL) AS TOTAL_SALARY FROM SCOTT.EMP 
+GROUP BY DEPTNO HAVING COUNT(*) > 4 ORDER BY DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>TOTAL_SALARY</th></tr>
+            <tr><td>20</td><td>10875</td></tr>
+            <tr><td>30</td><td>9400</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

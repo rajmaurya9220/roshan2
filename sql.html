@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SQL</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Lexend:wght@300;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --base: #0a0f1d;
+        --card-bg: #161d31;
+        --accent: #7367f0;
+        --cyan: #00cfe8;
+        --text-main: #d0d2d6;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--base);
+        font-family: "Lexend", sans-serif;
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        overflow-x: hidden;
+      }
+
+      .aurora-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background:
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(115, 103, 240, 0.12) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 20% 80%,
+            rgba(0, 207, 232, 0.1) 0%,
+            transparent 40%
+          );
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        padding: 60px 0;
+        z-index: 1;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+      .tagline {
+        color: var(--cyan);
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        font-weight: 800;
+      }
+      .main-title {
+        font-family: "Outfit", sans-serif;
+        font-size: clamp(2.5rem, 6vw, 3.5rem);
+        font-weight: 900;
+        margin: 10px 0;
+        background: linear-gradient(to right, #fff, var(--accent), var(--cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+      }
+
+      .topic-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 50px;
+      }
+
+      .topic-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 30px;
+        text-decoration: none;
+        color: white;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .topic-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--accent);
+        background: rgba(115, 103, 240, 0.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .icon-sm {
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        background: rgba(115, 103, 240, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cyan);
+        font-weight: 900;
+        margin-bottom: 15px;
+        border: 1px solid var(--accent);
+        transition: 0.3s;
+      }
+
+      .topic-card:hover .icon-sm {
+        background: var(--accent);
+        color: white;
+        box-shadow: 0 0 15px var(--accent);
+      }
+      .topic-card h3 {
+        font-family: "Outfit", sans-serif;
+        margin: 0 0 10px 0;
+        font-size: 1.3rem;
+      }
+      .topic-card p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      .back-btn {
+        display: block;
+        width: fit-content;
+        margin: 40px auto;
+        padding: 14px 40px;
+        border-radius: 12px;
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 0.85rem;
+        transition: 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .back-btn:hover {
+        background: var(--accent);
+        color: white;
+        box-shadow: 0 0 20px rgba(115, 103, 240, 0.4);
+      }
+
+      footer {
+        text-align: center;
+        color: #4b5563;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        padding-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="aurora-bg"></div>
+    <div class="container">
+      <header>
+        <p class="tagline">Database Management System</p>
+        <h1 class="main-title">SQL TOPICS</h1>
+      </header>
+
+      <div class="topic-grid">
+        <a href="DDL.html" class="topic-card">
+          <div class="icon-sm">DDL</div>
+          <h3>Data Definition</h3>
+          <p>Create, Alter, Drop & Truncate</p>
+        </a>
+
+        <a href="DML.html" class="topic-card">
+          <div class="icon-sm">DML</div>
+          <h3>Data Manipulation</h3>
+          <p>Insert, Update & Delete</p>
+        </a>
+
+        <a href="DQL.html" class="topic-card">
+          <div class="icon-sm">DQL</div>
+          <h3>Data Query</h3>
+          <p>Select & Basic Retrieval</p>
+        </a>
+
+        <a href="WHERE.html" class="topic-card">
+          <div class="icon-sm">FLT</div>
+          <h3>Filtering Data</h3>
+          <p>Where, Order By & Alias</p>
+        </a>
+
+        <a href="LIKE.html" class="topic-card">
+          <div class="icon-sm">LKE</div>
+          <h3>Pattern Matching</h3>
+          <p>Like & Escape Operators</p>
+        </a>
+
+        <a href="GROUP.html" class="topic-card">
+          <div class="icon-sm">GRP</div>
+          <h3>Group Functions</h3>
+          <p>Group By & Having Clause</p>
+        </a>
+
+        <a href="SUBQUERY.html" class="topic-card">
+          <div class="icon-sm">SUB</div>
+          <h3>Subqueries</h3>
+          <p>Nested & Correlated Queries</p>
+        </a>
+
+        <a href="SCALAR.html" class="topic-card">
+          <div class="icon-sm">SCL</div>
+          <h3>Scalar Functions</h3>
+          <p>String, Date & Numeric</p>
+        </a>
+
+        <a href="JOINS.html" class="topic-card">
+          <div class="icon-sm">JON</div>
+          <h3>Joins</h3>
+          <p>Inner, Outer & Self Joins</p>
+        </a>
+
+        <a href="SETS.html" class="topic-card">
+          <div class="icon-sm">SET</div>
+          <h3>Set Operators</h3>
+          <p>Union, Intersect & Minus</p>
+        </a>
+
+        <a href="VIEWS.html" class="topic-card">
+          <div class="icon-sm">VIW</div>
+          <h3>Views</h3>
+          <p>Simple & Materialized Views</p>
+        </a>
+
+        <a href="TCL_DCL.html" class="topic-card">
+          <div class="icon-sm">CTL</div>
+          <h3>TCL & DCL</h3>
+          <p>Commit, Rollback & Grant</p>
+        </a>
+      </div>
+
+      <a href="roshan.html" class="back-btn">Back to Home</a>
+      <footer>Made By Roshan Das</footer>
+    </div>
+  </body>
+</html>

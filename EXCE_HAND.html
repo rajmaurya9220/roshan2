@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - PL/SQL Exception Handling</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-text {
+            background-color: #f4f6f7; color: #2c3e50; padding: 15px;
+            border-left: 4px solid #3498db; border-radius: 0 4px 4px 0;
+            font-family: Consolas, monospace; font-size: 14px; margin: 0;
+            white-space: pre; overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PLSQL: EXCEPTION HANDLING</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a PL/SQL block to handle NO_DATA_FOUND exception while fetching employee details.</div>
+        <pre class="query">DECLARE
+    v_ename VARCHAR2(20);
+BEGIN
+    SELECT ENAME INTO v_ename FROM SCOTT.EMP WHERE EMPNO = 9999;
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_ename);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Employee not found.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Error: Employee not found.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Write a PL/SQL block to handle TOO_MANY_ROWS exception.</div>
+        <pre class="query">DECLARE
+    v_ename VARCHAR2(20);
+BEGIN
+    SELECT ENAME INTO v_ename FROM SCOTT.EMP; -- Fetches all names into one variable
+EXCEPTION
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Query returned more than one row.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Error: Query returned more than one row.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Write a PL/SQL block to handle ZERO_DIVIDE exception.</div>
+        <pre class="query">DECLARE
+    v_res NUMBER;
+BEGIN
+    v_res := 10 / 0;
+EXCEPTION
+    WHEN ZERO_DIVIDE THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Cannot divide by zero.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Error: Cannot divide by zero.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a PL/SQL block to handle VALUE_ERROR exception.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER(2);
+BEGIN
+    v_num := 150; -- Value exceeds precision
+EXCEPTION
+    WHEN VALUE_ERROR THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Value conversion or size error.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Error: Value conversion or size error.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Write a PL/SQL block with a generic WHEN OTHERS exception handler.</div>
+        <pre class="query">BEGIN
+    -- Some operation that might fail
+    INSERT INTO SCOTT.DEPT (DEPTNO) VALUES (10); -- Duplicate primary key
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An unexpected error occurred.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">An unexpected error occurred.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Write a PL/SQL block to display error code and message using SQLCODE and SQLERRM.</div>
+        <pre class="query">BEGIN
+    INSERT INTO SCOTT.DEPT (DEPTNO) VALUES (10);
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Code: ' || SQLCODE);
+        DBMS_OUTPUT.PUT_LINE('Message: ' || SQLERRM);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Code: -1
+Message: ORA-00001: unique constraint (...) violated
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Write a PL/SQL block to raise an error if salary is less than 2000 using RAISE_APPLICATION_ERROR.</div>
+        <pre class="query">DECLARE
+    v_sal NUMBER := 1500;
+BEGIN
+    IF v_sal < 2000 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Salary must be at least 2000.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">ORA-20001: Salary must be at least 2000.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Write a PL/SQL block to declare and handle a user-defined exception.</div>
+        <pre class="query">DECLARE
+    e_invalid_age EXCEPTION;
+    v_age NUMBER := 15;
+BEGIN
+    IF v_age < 18 THEN
+        RAISE e_invalid_age;
+    END IF;
+EXCEPTION
+    WHEN e_invalid_age THEN
+        DBMS_OUTPUT.PUT_LINE('Custom Error: Age must be 18 or above.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Custom Error: Age must be 18 or above.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Write a PL/SQL block to raise a custom exception when salary exceeds limit.</div>
+        <pre class="query">DECLARE
+    e_over_limit EXCEPTION;
+    v_sal NUMBER := 6000;
+BEGIN
+    IF v_sal > 5000 THEN
+        RAISE e_over_limit;
+    END IF;
+EXCEPTION
+    WHEN e_over_limit THEN
+        DBMS_OUTPUT.PUT_LINE('Salary exceeds maximum limit of 5000.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Salary exceeds maximum limit of 5000.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Write a PL/SQL block to catch an exception and re-raise it using RAISE.</div>
+        <pre class="query">BEGIN
+    BEGIN
+        v_res := 10/0;
+    EXCEPTION
+        WHEN ZERO_DIVIDE THEN
+            DBMS_OUTPUT.PUT_LINE('Logging div by zero locally...');
+            RAISE; -- Re-raise to outer block
+    END;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Caught re-raised error in outer block.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Logging div by zero locally...
+Caught re-raised error in outer block.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Write a PL/SQL block to simulate bank withdrawal with exception handling.</div>
+        <pre class="query">DECLARE
+    v_bal NUMBER := 1000;
+    v_amt NUMBER := 1500;
+    e_insufficient_funds EXCEPTION;
+BEGIN
+    IF v_amt > v_bal THEN
+        RAISE e_insufficient_funds;
+    END IF;
+    v_bal := v_bal - v_amt;
+EXCEPTION
+    WHEN e_insufficient_funds THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Insufficient balance to withdraw ' || v_amt);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Error: Insufficient balance to withdraw 1500
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Write a PL/SQL block to log errors into a table using exception handling.</div>
+        <pre class="query">-- Assume table ERROR_LOG(err_msg VARCHAR2(200), err_date DATE)
+BEGIN
+    INSERT INTO SCOTT.DEPT (DEPTNO) VALUES (10);
+EXCEPTION
+    WHEN OTHERS THEN
+        INSERT INTO ERROR_LOG VALUES (SQLERRM, SYSDATE);
+        COMMIT;
+        DBMS_OUTPUT.PUT_LINE('Error logged to table.');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Error logged to table.
+PL/SQL procedure successfully completed.</pre>
+    </div>
+
+</body>
+</html>

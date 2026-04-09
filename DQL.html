@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - DQL Select (SCOTT Schema)</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 900px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 {
+            margin: 5px 0;
+            font-size: 26px;
+            color: #2c3e50;
+        }
+        .header h2 {
+            margin: 5px 0;
+            font-size: 20px;
+            font-weight: normal;
+        }
+        .header h3 {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #555;
+        }
+        .student-info {
+            text-align: right;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .student-info p {
+            margin: 2px 0;
+            font-weight: 600;
+        }
+        .schema {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #e8f4f8;
+            border-left: 5px solid #3498db;
+            border-radius: 4px;
+        }
+        .schema p {
+            margin: 5px 0;
+            font-family: Consolas, monospace;
+        }
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .question {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .query {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            overflow-x: auto;
+            margin: 0 0 15px 0;
+        }
+        .output-label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .output-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            font-family: Consolas, monospace;
+        }
+        .output-table th, .output-table td {
+            border: 1px solid #ddd;
+            padding: 6px 10px;
+            text-align: left;
+        }
+        .output-table th {
+            background-color: #f4f6f7;
+            color: #333;
+            font-weight: 600;
+        }
+        .output-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        .output-table tr:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: Data Query Language (DQL) - SELECT</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Display all columns of the EMP table.</div>
+        <pre class="query">SELECT * FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>JOB</th><th>MGR</th><th>HIREDATE</th><th>SAL</th><th>COMM</th><th>DEPTNO</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>CLERK</td><td>7902</td><td>17-DEC-80</td><td>800</td><td>-</td><td>20</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>SALESMAN</td><td>7698</td><td>20-FEB-81</td><td>1600</td><td>300</td><td>30</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>SALESMAN</td><td>7698</td><td>22-FEB-81</td><td>1250</td><td>500</td><td>30</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>MANAGER</td><td>7839</td><td>02-APR-81</td><td>2975</td><td>-</td><td>20</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>SALESMAN</td><td>7698</td><td>28-SEP-81</td><td>1250</td><td>1400</td><td>30</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>MANAGER</td><td>7839</td><td>01-MAY-81</td><td>2850</td><td>-</td><td>30</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>MANAGER</td><td>7839</td><td>09-JUN-81</td><td>2450</td><td>-</td><td>10</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>ANALYST</td><td>7566</td><td>19-APR-87</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7839</td><td>KING</td><td>PRESIDENT</td><td>-</td><td>17-NOV-81</td><td>5000</td><td>-</td><td>10</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>SALESMAN</td><td>7698</td><td>08-SEP-81</td><td>1500</td><td>0</td><td>30</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>CLERK</td><td>7788</td><td>23-MAY-87</td><td>1100</td><td>-</td><td>20</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>CLERK</td><td>7698</td><td>03-DEC-81</td><td>950</td><td>-</td><td>30</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>ANALYST</td><td>7566</td><td>03-DEC-81</td><td>3000</td><td>-</td><td>20</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>CLERK</td><td>7782</td><td>23-JAN-82</td><td>1300</td><td>-</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Display EMPNO, ENAME, and SAL of all employees from the EMP table.</div>
+        <pre class="query">SELECT EMPNO, ENAME, SAL FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMPNO</th><th>ENAME</th><th>SAL</th></tr>
+            <tr><td>7369</td><td>SMITH</td><td>800</td></tr>
+            <tr><td>7499</td><td>ALLEN</td><td>1600</td></tr>
+            <tr><td>7521</td><td>WARD</td><td>1250</td></tr>
+            <tr><td>7566</td><td>JONES</td><td>2975</td></tr>
+            <tr><td>7654</td><td>MARTIN</td><td>1250</td></tr>
+            <tr><td>7698</td><td>BLAKE</td><td>2850</td></tr>
+            <tr><td>7782</td><td>CLARK</td><td>2450</td></tr>
+            <tr><td>7788</td><td>SCOTT</td><td>3000</td></tr>
+            <tr><td>7839</td><td>KING</td><td>5000</td></tr>
+            <tr><td>7844</td><td>TURNER</td><td>1500</td></tr>
+            <tr><td>7876</td><td>ADAMS</td><td>1100</td></tr>
+            <tr><td>7900</td><td>JAMES</td><td>950</td></tr>
+            <tr><td>7902</td><td>FORD</td><td>3000</td></tr>
+            <tr><td>7934</td><td>MILLER</td><td>1300</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Display unique job titles from the EMP table.</div>
+        <pre class="query">SELECT DISTINCT JOB FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th></tr>
+            <tr><td>CLERK</td></tr>
+            <tr><td>SALESMAN</td></tr>
+            <tr><td>MANAGER</td></tr>
+            <tr><td>ANALYST</td></tr>
+            <tr><td>PRESIDENT</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Display employee names along with their department numbers from the EMP table.</div>
+        <pre class="query">SELECT ENAME, DEPTNO FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DEPTNO</th></tr>
+            <tr><td>SMITH</td><td>20</td></tr>
+            <tr><td>ALLEN</td><td>30</td></tr>
+            <tr><td>WARD</td><td>30</td></tr>
+            <tr><td>JONES</td><td>20</td></tr>
+            <tr><td>MARTIN</td><td>30</td></tr>
+            <tr><td>BLAKE</td><td>30</td></tr>
+            <tr><td>CLARK</td><td>10</td></tr>
+            <tr><td>SCOTT</td><td>20</td></tr>
+            <tr><td>KING</td><td>10</td></tr>
+            <tr><td>TURNER</td><td>30</td></tr>
+            <tr><td>ADAMS</td><td>20</td></tr>
+            <tr><td>JAMES</td><td>30</td></tr>
+            <tr><td>FORD</td><td>20</td></tr>
+            <tr><td>MILLER</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Display all department details from the DEPT table.</div>
+        <pre class="query">SELECT * FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th><th>DNAME</th><th>LOC</th></tr>
+            <tr><td>10</td><td>ACCOUNTING</td><td>NEW YORK</td></tr>
+            <tr><td>20</td><td>RESEARCH</td><td>DALLAS</td></tr>
+            <tr><td>30</td><td>SALES</td><td>CHICAGO</td></tr>
+            <tr><td>40</td><td>OPERATIONS</td><td>BOSTON</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Display distinct department numbers from the EMP table.</div>
+        <pre class="query">SELECT DISTINCT DEPTNO FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>10</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Display employee name and annual salary (SAL × 12) from the EMP table.</div>
+        <pre class="query">SELECT ENAME, SAL * 12 AS ANNUAL_SALARY FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>ANNUAL_SALARY</th></tr>
+            <tr><td>SMITH</td><td>9600</td></tr>
+            <tr><td>ALLEN</td><td>19200</td></tr>
+            <tr><td>WARD</td><td>15000</td></tr>
+            <tr><td>JONES</td><td>35700</td></tr>
+            <tr><td>MARTIN</td><td>15000</td></tr>
+            <tr><td>BLAKE</td><td>34200</td></tr>
+            <tr><td>CLARK</td><td>29400</td></tr>
+            <tr><td>SCOTT</td><td>36000</td></tr>
+            <tr><td>KING</td><td>60000</td></tr>
+            <tr><td>TURNER</td><td>18000</td></tr>
+            <tr><td>ADAMS</td><td>13200</td></tr>
+            <tr><td>JAMES</td><td>11400</td></tr>
+            <tr><td>FORD</td><td>36000</td></tr>
+            <tr><td>MILLER</td><td>15600</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Display employee name, salary, and commission from the EMP table.</div>
+        <pre class="query">SELECT ENAME, SAL, COMM FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>SAL</th><th>COMM</th></tr>
+            <tr><td>SMITH</td><td>800</td><td>-</td></tr>
+            <tr><td>ALLEN</td><td>1600</td><td>300</td></tr>
+            <tr><td>WARD</td><td>1250</td><td>500</td></tr>
+            <tr><td>JONES</td><td>2975</td><td>-</td></tr>
+            <tr><td>MARTIN</td><td>1250</td><td>1400</td></tr>
+            <tr><td>BLAKE</td><td>2850</td><td>-</td></tr>
+            <tr><td>CLARK</td><td>2450</td><td>-</td></tr>
+            <tr><td>SCOTT</td><td>3000</td><td>-</td></tr>
+            <tr><td>KING</td><td>5000</td><td>-</td></tr>
+            <tr><td>TURNER</td><td>1500</td><td>0</td></tr>
+            <tr><td>ADAMS</td><td>1100</td><td>-</td></tr>
+            <tr><td>JAMES</td><td>950</td><td>-</td></tr>
+            <tr><td>FORD</td><td>3000</td><td>-</td></tr>
+            <tr><td>MILLER</td><td>1300</td><td>-</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Display job and salary of all employees from the EMP table.</div>
+        <pre class="query">SELECT JOB, SAL FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th><th>SAL</th></tr>
+            <tr><td>CLERK</td><td>800</td></tr>
+            <tr><td>SALESMAN</td><td>1600</td></tr>
+            <tr><td>SALESMAN</td><td>1250</td></tr>
+            <tr><td>MANAGER</td><td>2975</td></tr>
+            <tr><td>SALESMAN</td><td>1250</td></tr>
+            <tr><td>MANAGER</td><td>2850</td></tr>
+            <tr><td>MANAGER</td><td>2450</td></tr>
+            <tr><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>PRESIDENT</td><td>5000</td></tr>
+            <tr><td>SALESMAN</td><td>1500</td></tr>
+            <tr><td>CLERK</td><td>1100</td></tr>
+            <tr><td>CLERK</td><td>950</td></tr>
+            <tr><td>ANALYST</td><td>3000</td></tr>
+            <tr><td>CLERK</td><td>1300</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Display employees along with their manager numbers from the EMP table.</div>
+        <pre class="query">SELECT ENAME, MGR FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>MGR</th></tr>
+            <tr><td>SMITH</td><td>7902</td></tr>
+            <tr><td>ALLEN</td><td>7698</td></tr>
+            <tr><td>WARD</td><td>7698</td></tr>
+            <tr><td>JONES</td><td>7839</td></tr>
+            <tr><td>MARTIN</td><td>7698</td></tr>
+            <tr><td>BLAKE</td><td>7839</td></tr>
+            <tr><td>CLARK</td><td>7839</td></tr>
+            <tr><td>SCOTT</td><td>7566</td></tr>
+            <tr><td>KING</td><td>-</td></tr>
+            <tr><td>TURNER</td><td>7698</td></tr>
+            <tr><td>ADAMS</td><td>7788</td></tr>
+            <tr><td>JAMES</td><td>7698</td></tr>
+            <tr><td>FORD</td><td>7566</td></tr>
+            <tr><td>MILLER</td><td>7782</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

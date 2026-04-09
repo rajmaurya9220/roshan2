@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - PLSQL ( OUTPUT STATEMENT, DATATYPES, VARIABLES, CONSTANTS )</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PLSQL: OUTPUT STATEMENT, DATATYPES, VARIABLES, CONSTANTS</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a PL/SQL block to print your name and city in two separate lines.</div>
+        <pre class="query">BEGIN
+    DBMS_OUTPUT.PUT_LINE('Name: Rahul');
+    DBMS_OUTPUT.PUT_LINE('City: Mohali');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Name: Rahul<br>City: Mohali<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Write a PL/SQL block to display numbers from 1 to 5 using `DBMS_OUTPUT.PUT_LINE`.</div>
+        <pre class="query">BEGIN
+    DBMS_OUTPUT.PUT_LINE('1');
+    DBMS_OUTPUT.PUT_LINE('2');
+    DBMS_OUTPUT.PUT_LINE('3');
+    DBMS_OUTPUT.PUT_LINE('4');
+    DBMS_OUTPUT.PUT_LINE('5');
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>1<br>2<br>3<br>4<br>5<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Write a PL/SQL block to print the current system date.</div>
+        <pre class="query">BEGIN
+    DBMS_OUTPUT.PUT_LINE('Current Date: ' || SYSDATE);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Current Date: 07-APR-26<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a PL/SQL block to display employee name and salary (use variables).</div>
+        <pre class="query">DECLARE
+    v_name VARCHAR2(20) := 'SMITH';
+    v_sal NUMBER := 800;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Employee Name: ' || v_name);
+    DBMS_OUTPUT.PUT_LINE('Salary: ' || v_sal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Employee Name: SMITH<br>Salary: 800<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Write a PL/SQL block to declare a variable and assign your age, then display it.</div>
+        <pre class="query">DECLARE
+    v_age NUMBER := 20;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('My Age is: ' || v_age);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>My Age is: 20<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Write a PL/SQL block to declare two variables and print their sum.</div>
+        <pre class="query">DECLARE
+    v_num1 NUMBER := 10;
+    v_num2 NUMBER := 25;
+    v_sum NUMBER;
+BEGIN
+    v_sum := v_num1 + v_num2;
+    DBMS_OUTPUT.PUT_LINE('Sum is: ' || v_sum);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Sum is: 35<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Write a PL/SQL block to store employee name and salary in variables and display them.</div>
+        <pre class="query">DECLARE
+    v_emp_name VARCHAR2(50);
+    v_emp_sal NUMBER;
+BEGIN
+    SELECT ENAME, SAL INTO v_emp_name, v_emp_sal FROM SCOTT.EMP WHERE EMPNO = 7788;
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_emp_name || ', Salary: ' || v_emp_sal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Name: SCOTT, Salary: 3000<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Write a PL/SQL block to swap two numbers using variables.</div>
+        <pre class="query">DECLARE
+    a NUMBER := 5;
+    b NUMBER := 10;
+    temp NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Before Swap - a: ' || a || ', b: ' || b);
+    temp := a;
+    a := b;
+    b := temp;
+    DBMS_OUTPUT.PUT_LINE('After Swap  - a: ' || a || ', b: ' || b);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Before Swap - a: 5, b: 10<br>After Swap  - a: 10, b: 5<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Write a PL/SQL block to calculate area of a rectangle using variables.</div>
+        <pre class="query">DECLARE
+    v_length NUMBER := 15;
+    v_width NUMBER := 8;
+    v_area NUMBER;
+BEGIN
+    v_area := v_length * v_width;
+    DBMS_OUTPUT.PUT_LINE('Area of Rectangle is: ' || v_area);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Area of Rectangle is: 120<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Write a PL/SQL block to declare a constant value for PI and calculate area of a circle.</div>
+        <pre class="query">DECLARE
+    c_pi CONSTANT NUMBER := 3.14159;
+    v_radius NUMBER := 5;
+    v_area NUMBER;
+BEGIN
+    v_area := c_pi * (v_radius * v_radius);
+    DBMS_OUTPUT.PUT_LINE('Area of Circle is: ' || v_area);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Area of Circle is: 78.53975<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Write a PL/SQL block to declare a constant tax rate and calculate total salary after tax.</div>
+        <pre class="query">DECLARE
+    c_tax_rate CONSTANT NUMBER := 0.15;
+    v_salary NUMBER := 5000;
+    v_net_salary NUMBER;
+BEGIN
+    v_net_salary := v_salary - (v_salary * c_tax_rate);
+    DBMS_OUTPUT.PUT_LINE('Net Salary after 15% tax is: ' || v_net_salary);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Net Salary after 15% tax is: 4250<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Write a PL/SQL block where constant value cannot be changed (try modifying and observe error).</div>
+        <pre class="query">DECLARE
+    c_const CONSTANT NUMBER := 100;
+BEGIN
+    -- c_const := 200; -- Uncommenting this will cause an error
+    DBMS_OUTPUT.PUT_LINE('Constant Value: ' || c_const);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Constant Value: 100<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Write a PL/SQL block to calculate simple interest using constant rate of interest.</div>
+        <pre class="query">DECLARE
+    v_principal NUMBER := 10000;
+    c_rate CONSTANT NUMBER := 5;
+    v_time NUMBER := 3;
+    v_si NUMBER;
+BEGIN
+    v_si := (v_principal * c_rate * v_time) / 100;
+    DBMS_OUTPUT.PUT_LINE('Simple Interest is: ' || v_si);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Simple Interest is: 1500<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Write a PL/SQL block using different datatypes: NUMBER, VARCHAR2, DATE.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 101;
+    v_text VARCHAR2(30) := 'Hello PL/SQL';
+    v_date DATE := SYSDATE;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Number: ' || v_num);
+    DBMS_OUTPUT.PUT_LINE('Text: ' || v_text);
+    DBMS_OUTPUT.PUT_LINE('Date: ' || v_date);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Number: 101<br>Text: Hello PL/SQL<br>Date: 07-APR-26<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Write a PL/SQL block to declare a variable using %TYPE from EMP table salary column.</div>
+        <pre class="query">DECLARE
+    v_emp_sal SCOTT.EMP.SAL%TYPE;
+BEGIN
+    SELECT SAL INTO v_emp_sal FROM SCOTT.EMP WHERE EMPNO = 7369;
+    DBMS_OUTPUT.PUT_LINE('Salary for 7369 is: ' || v_emp_sal);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Salary for 7369 is: 800<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Write a PL/SQL block to declare a record using %ROWTYPE and display employee details.</div>
+        <pre class="query">DECLARE
+    v_emp_rec SCOTT.EMP%ROWTYPE;
+BEGIN
+    SELECT * INTO v_emp_rec FROM SCOTT.EMP WHERE EMPNO = 7900;
+    DBMS_OUTPUT.PUT_LINE('Emp Name: ' || v_emp_rec.ENAME || ' | Job: ' || v_emp_rec.JOB || ' | Salary: ' || v_emp_rec.SAL);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Emp Name: JAMES | Job: CLERK | Salary: 950<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Write a PL/SQL block to store and display current date using DATE datatype.</div>
+        <pre class="query">DECLARE
+    v_today DATE := SYSDATE;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Today is: ' || TO_CHAR(v_today, 'DD-MON-YYYY HH24:MI:SS'));
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Today is: 07-APR-2026 19:20:00<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Write a PL/SQL block to convert number to string and display it.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 4500.75;
+    v_str VARCHAR2(20);
+BEGIN
+    v_str := TO_CHAR(v_num, '$9,999.99');
+    DBMS_OUTPUT.PUT_LINE('Formatted String: ' || v_str);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Formatted String:  $4,500.75<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Write a PL/SQL block using variables, constants, and output statement together.</div>
+        <pre class="query">DECLARE
+    c_company_name CONSTANT VARCHAR2(50) := 'Tech Solutions Inc.';
+    v_employee VARCHAR2(30) := 'Alice';
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Employee: ' || v_employee || ' works at ' || c_company_name);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Employee: Alice works at Tech Solutions Inc.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Write a PL/SQL block to display employee details using %ROWTYPE, constants, and comments.</div>
+        <pre class="query">DECLARE
+    -- Record to hold entire row from EMP
+    v_emp_record SCOTT.EMP%ROWTYPE;
+    c_dept CONSTANT NUMBER := 10; -- Constant department
+BEGIN
+    -- Fetching data for a specific employee in dept 10
+    SELECT * INTO v_emp_record FROM SCOTT.EMP WHERE EMPNO = 7839 AND DEPTNO = c_dept;
+    DBMS_OUTPUT.PUT_LINE('President Name: ' || v_emp_record.ENAME || ' hired on ' || v_emp_record.HIREDATE);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>President Name: KING hired on 17-NOV-81<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Write a PL/SQL block to calculate bonus (10% of salary) and display result using proper comments.</div>
+        <pre class="query">DECLARE
+    v_sal NUMBER;
+    v_bonus NUMBER;
+BEGIN
+    -- Retrieve salary of employee 7499
+    SELECT SAL INTO v_sal FROM SCOTT.EMP WHERE EMPNO = 7499;
+    
+    -- Calculate 10% bonus
+    v_bonus := v_sal * 0.10;
+    
+    -- Display results
+    DBMS_OUTPUT.PUT_LINE('Base Salary: ' || v_sal);
+    DBMS_OUTPUT.PUT_LINE('Calculated Bonus (10%): ' || v_bonus);
+    DBMS_OUTPUT.PUT_LINE('Total Comp: ' || (v_sal + v_bonus));
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Base Salary: 1600<br>Calculated Bonus (10%): 160<br>Total Comp: 1760<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Write a PL/SQL block that uses all concepts: variable, constant, datatype, and output.</div>
+        <pre class="query">DECLARE
+    v_emp_name VARCHAR2(50);
+    v_base_sal NUMBER(8,2);
+    v_join_date DATE;
+    c_bonus_rate CONSTANT NUMBER := 0.20;
+    v_total_pay NUMBER(8,2);
+BEGIN
+    -- Fetching employee info
+    SELECT ENAME, SAL, HIREDATE INTO v_emp_name, v_base_sal, v_join_date 
+    FROM SCOTT.EMP WHERE EMPNO = 7566;
+    
+    -- Computation
+    v_total_pay := v_base_sal + (v_base_sal * c_bonus_rate);
+    
+    -- Output formatting
+    DBMS_OUTPUT.PUT_LINE('--- Employee Pay Slip ---');
+    DBMS_OUTPUT.PUT_LINE('Name: ' || v_emp_name);
+    DBMS_OUTPUT.PUT_LINE('Joined: ' || v_join_date);
+    DBMS_OUTPUT.PUT_LINE('Base Salary: $' || v_base_sal);
+    DBMS_OUTPUT.PUT_LINE('Bonus Rate: ' || (c_bonus_rate * 100) || '%');
+    DBMS_OUTPUT.PUT_LINE('Total Payable: $' || v_total_pay);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>--- Employee Pay Slip ---<br>Name: JONES<br>Joined: 02-APR-81<br>Base Salary: $2975<br>Bonus Rate: 20%<br>Total Payable: $3570<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - JOINS (Inner, Outer, Cross)</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: JOINS (Inner, Cartesian/Cross, Left, Right, Full Outer)</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Display employee name and department name.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>SMITH</td><td>RESEARCH</td></tr>
+            <tr><td>ALLEN</td><td>SALES</td></tr>
+            <tr><td>CLARK</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Display employee name, salary, and department location.</div>
+        <pre class="query">SELECT E.ENAME, E.SAL, D.LOC 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>SAL</th><th>LOC</th></tr>
+            <tr><td>SMITH</td><td>800</td><td>DALLAS</td></tr>
+            <tr><td>ALLEN</td><td>1600</td><td>CHICAGO</td></tr>
+            <tr><td>CLARK</td><td>2450</td><td>NEW YORK</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Display employee name and department name for department 10.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.DEPTNO = 10;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>CLARK</td><td>ACCOUNTING</td></tr>
+            <tr><td>KING</td><td>ACCOUNTING</td></tr>
+            <tr><td>MILLER</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Display employee name and department name where salary > 2000.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.SAL > 2000;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>JONES</td><td>RESEARCH</td></tr>
+            <tr><td>BLAKE</td><td>SALES</td></tr>
+            <tr><td>CLARK</td><td>ACCOUNTING</td></tr>
+            <tr><td>SCOTT</td><td>RESEARCH</td></tr>
+            <tr><td>KING</td><td>ACCOUNTING</td></tr>
+            <tr><td>FORD</td><td>RESEARCH</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Display employee name, job, and department name.</div>
+        <pre class="query">SELECT E.ENAME, E.JOB, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>JOB</th><th>DNAME</th></tr>
+            <tr><td>SMITH</td><td>CLERK</td><td>RESEARCH</td></tr>
+            <tr><td>ALLEN</td><td>SALESMAN</td><td>SALES</td></tr>
+            <tr><td>CLARK</td><td>MANAGER</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Display employee name and department location for CLERKs.</div>
+        <pre class="query">SELECT E.ENAME, D.LOC 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.JOB = 'CLERK';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>LOC</th></tr>
+            <tr><td>SMITH</td><td>DALLAS</td></tr>
+            <tr><td>ADAMS</td><td>DALLAS</td></tr>
+            <tr><td>JAMES</td><td>CHICAGO</td></tr>
+            <tr><td>MILLER</td><td>NEW YORK</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Display employee name and department name working in NEW YORK.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE D.LOC = 'NEW YORK';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>CLARK</td><td>ACCOUNTING</td></tr>
+            <tr><td>KING</td><td>ACCOUNTING</td></tr>
+            <tr><td>MILLER</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Display employee name, department number, and department name.</div>
+        <pre class="query">SELECT E.ENAME, E.DEPTNO, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DEPTNO</th><th>DNAME</th></tr>
+            <tr><td>SMITH</td><td>20</td><td>RESEARCH</td></tr>
+            <tr><td>ALLEN</td><td>30</td><td>SALES</td></tr>
+            <tr><td>CLARK</td><td>10</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Display employees hired after 1981 with department name.</div>
+        <pre class="query">SELECT E.ENAME, E.HIREDATE, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.HIREDATE > '31-DEC-1981';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>HIREDATE</th><th>DNAME</th></tr>
+            <tr><td>MILLER</td><td>23-JAN-1982</td><td>ACCOUNTING</td></tr>
+            <tr><td>SCOTT</td><td>19-APR-1987</td><td>RESEARCH</td></tr>
+            <tr><td>ADAMS</td><td>23-MAY-1987</td><td>RESEARCH</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Display employees with commission along with department name.</div>
+        <pre class="query">SELECT E.ENAME, E.COMM, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.COMM IS NOT NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>COMM</th><th>DNAME</th></tr>
+            <tr><td>ALLEN</td><td>300</td><td>SALES</td></tr>
+            <tr><td>WARD</td><td>500</td><td>SALES</td></tr>
+            <tr><td>MARTIN</td><td>1400</td><td>SALES</td></tr>
+            <tr><td>TURNER</td><td>0</td><td>SALES</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Display employees whose salary is between 1500 and 3000 with department.</div>
+        <pre class="query">SELECT E.ENAME, E.SAL, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.SAL BETWEEN 1500 AND 3000;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>SAL</th><th>DNAME</th></tr>
+            <tr><td>ALLEN</td><td>1600</td><td>SALES</td></tr>
+            <tr><td>JONES</td><td>2975</td><td>RESEARCH</td></tr>
+            <tr><td>BLAKE</td><td>2850</td><td>SALES</td></tr>
+            <tr><td>CLARK</td><td>2450</td><td>ACCOUNTING</td></tr>
+            <tr><td>SCOTT</td><td>3000</td><td>RESEARCH</td></tr>
+            <tr><td>TURNER</td><td>1500</td><td>SALES</td></tr>
+            <tr><td>FORD</td><td>3000</td><td>RESEARCH</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Display employees who are the only employee in their department.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.DEPTNO IN (SELECT DEPTNO FROM SCOTT.EMP GROUP BY DEPTNO HAVING COUNT(*) = 1);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td colspan="2">no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Display employees whose department has more than 3 employees.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.DEPTNO IN (SELECT DEPTNO FROM SCOTT.EMP GROUP BY DEPTNO HAVING COUNT(*) > 3);</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>SMITH</td><td>RESEARCH</td></tr>
+            <tr><td>ALLEN</td><td>SALES</td></tr>
+            <tr><td>WARD</td><td>SALES</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Display departments where no employee earns more than 2000.</div>
+        <pre class="query">SELECT D.DNAME 
+FROM SCOTT.DEPT D 
+WHERE D.DEPTNO NOT IN (SELECT DEPTNO FROM SCOTT.EMP WHERE SAL > 2000);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DNAME</th></tr>
+            <tr><td>OPERATIONS</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Display employees who earn more than at least one manager.</div>
+        <pre class="query">SELECT ENAME, SAL 
+FROM SCOTT.EMP 
+WHERE SAL > ANY (SELECT SAL FROM SCOTT.EMP WHERE JOB = 'MANAGER');</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>SAL</th></tr>
+            <tr><td>JONES</td><td>2975</td></tr>
+            <tr><td>BLAKE</td><td>2850</td></tr>
+            <tr><td>SCOTT</td><td>3000</td></tr>
+            <tr><td>KING</td><td>5000</td></tr>
+            <tr><td>FORD</td><td>3000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Display employees who share same job and department.</div>
+        <pre class="query">SELECT E1.ENAME AS EMP1, E2.ENAME AS EMP2, E1.JOB, E1.DEPTNO 
+FROM SCOTT.EMP E1 
+JOIN SCOTT.EMP E2 ON E1.JOB = E2.JOB AND E1.DEPTNO = E2.DEPTNO 
+WHERE E1.EMPNO < E2.EMPNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>EMP1</th><th>EMP2</th><th>JOB</th><th>DEPTNO</th></tr>
+            <tr><td>SMITH</td><td>ADAMS</td><td>CLERK</td><td>20</td></tr>
+            <tr><td>ALLEN</td><td>WARD</td><td>SALESMAN</td><td>30</td></tr>
+            <tr><td>SCOTT</td><td>FORD</td><td>ANALYST</td><td>20</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Display employees working in same department as their manager.</div>
+        <pre class="query">SELECT E.ENAME AS EMP_NAME, M.ENAME AS MGR_NAME, E.DEPTNO 
+FROM SCOTT.EMP E 
+JOIN SCOTT.EMP M ON E.MGR = M.EMPNO 
+WHERE E.DEPTNO = M.DEPTNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>EMP_NAME</th><th>MGR_NAME</th><th>DEPTNO</th></tr>
+            <tr><td>SMITH</td><td>FORD</td><td>20</td></tr>
+            <tr><td>ALLEN</td><td>BLAKE</td><td>30</td></tr>
+            <tr><td>MILLER</td><td>CLARK</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Display employees whose manager works in a different department.</div>
+        <pre class="query">SELECT E.ENAME AS EMP_NAME, M.ENAME AS MGR_NAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.EMP M ON E.MGR = M.EMPNO 
+WHERE E.DEPTNO != M.DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>EMP_NAME</th><th>MGR_NAME</th></tr>
+            <tr><td>JONES</td><td>KING</td></tr>
+            <tr><td>BLAKE</td><td>KING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Display employees who are highest paid in their department.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME, E.SAL 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE (E.DEPTNO, E.SAL) IN (SELECT DEPTNO, MAX(SAL) FROM SCOTT.EMP GROUP BY DEPTNO);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th><th>SAL</th></tr>
+            <tr><td>BLAKE</td><td>SALES</td><td>2850</td></tr>
+            <tr><td>SCOTT</td><td>RESEARCH</td><td>3000</td></tr>
+            <tr><td>KING</td><td>ACCOUNTING</td><td>5000</td></tr>
+            <tr><td>FORD</td><td>RESEARCH</td><td>3000</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Display employees earning more than their department average.</div>
+        <pre class="query">SELECT E.ENAME, E.SAL, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.SAL > (SELECT AVG(SAL) FROM SCOTT.EMP WHERE DEPTNO = E.DEPTNO);</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>SAL</th><th>DNAME</th></tr>
+            <tr><td>ALLEN</td><td>1600</td><td>SALES</td></tr>
+            <tr><td>JONES</td><td>2975</td><td>RESEARCH</td></tr>
+            <tr><td>BLAKE</td><td>2850</td><td>SALES</td></tr>
+            <tr><td>KING</td><td>5000</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Display department with maximum employees.</div>
+        <pre class="query">SELECT D.DNAME, COUNT(E.EMPNO) AS EMP_COUNT 
+FROM SCOTT.DEPT D 
+JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO 
+GROUP BY D.DNAME 
+HAVING COUNT(E.EMPNO) = (SELECT MAX(COUNT(*)) FROM SCOTT.EMP GROUP BY DEPTNO);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DNAME</th><th>EMP_COUNT</th></tr>
+            <tr><td>SALES</td><td>6</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Display department with highest total salary.</div>
+        <pre class="query">SELECT D.DNAME, SUM(E.SAL) AS TOTAL_SAL 
+FROM SCOTT.DEPT D 
+JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO 
+GROUP BY D.DNAME 
+HAVING SUM(E.SAL) = (SELECT MAX(SUM(SAL)) FROM SCOTT.EMP GROUP BY DEPTNO);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DNAME</th><th>TOTAL_SAL</th></tr>
+            <tr><td>RESEARCH</td><td>10875</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Display department name and average salary.</div>
+        <pre class="query">SELECT D.DNAME, ROUND(AVG(E.SAL), 2) AS AVG_SALARY 
+FROM SCOTT.DEPT D 
+LEFT JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO 
+GROUP BY D.DNAME;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DNAME</th><th>AVG_SALARY</th></tr>
+            <tr><td>ACCOUNTING</td><td>2916.67</td></tr>
+            <tr><td>RESEARCH</td><td>2175</td></tr>
+            <tr><td>SALES</td><td>1566.67</td></tr>
+            <tr><td>OPERATIONS</td><td></td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Display department name and total salary.</div>
+        <pre class="query">SELECT D.DNAME, SUM(E.SAL) AS TOTAL_SALARY 
+FROM SCOTT.DEPT D 
+LEFT JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO 
+GROUP BY D.DNAME;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DNAME</th><th>TOTAL_SALARY</th></tr>
+            <tr><td>ACCOUNTING</td><td>8750</td></tr>
+            <tr><td>RESEARCH</td><td>10875</td></tr>
+            <tr><td>SALES</td><td>9400</td></tr>
+            <tr><td>OPERATIONS</td><td></td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Display department name and number of employees.</div>
+        <pre class="query">SELECT D.DNAME, COUNT(E.EMPNO) AS EMP_COUNT 
+FROM SCOTT.DEPT D 
+LEFT JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO 
+GROUP BY D.DNAME;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DNAME</th><th>EMP_COUNT</th></tr>
+            <tr><td>ACCOUNTING</td><td>3</td></tr>
+            <tr><td>RESEARCH</td><td>5</td></tr>
+            <tr><td>SALES</td><td>6</td></tr>
+            <tr><td>OPERATIONS</td><td>0</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Display employees not assigned to any department.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Display departments with no employees.</div>
+        <pre class="query">SELECT D.DNAME 
+FROM SCOTT.DEPT D 
+LEFT JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO 
+WHERE E.EMPNO IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DNAME</th></tr>
+            <tr><td>OPERATIONS</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Display all departments with employees (even if no employees).</div>
+        <pre class="query">SELECT D.DNAME, E.ENAME 
+FROM SCOTT.DEPT D 
+LEFT JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>DNAME</th><th>ENAME</th></tr>
+            <tr><td>ACCOUNTING</td><td>CLARK</td></tr>
+            <tr><td>ACCOUNTING</td><td>KING</td></tr>
+            <tr><td>RESEARCH</td><td>SMITH</td></tr>
+            <tr><td>OPERATIONS</td><td></td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Display all employees with department name (even if no department).</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+LEFT JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>SMITH</td><td>RESEARCH</td></tr>
+            <tr><td>ALLEN</td><td>SALES</td></tr>
+            <tr><td>CLARK</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Display employees whose manager works in department 10.</div>
+        <pre class="query">SELECT E.ENAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.EMP M ON E.MGR = M.EMPNO 
+WHERE M.DEPTNO = 10;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>JONES</td></tr>
+            <tr><td>BLAKE</td></tr>
+            <tr><td>CLARK</td></tr>
+            <tr><td>MILLER</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Display employees working under the same manager.</div>
+        <pre class="query">SELECT E1.ENAME AS EMP1, E2.ENAME AS EMP2, E1.MGR 
+FROM SCOTT.EMP E1 
+JOIN SCOTT.EMP E2 ON E1.MGR = E2.MGR 
+WHERE E1.EMPNO < E2.EMPNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>EMP1</th><th>EMP2</th><th>MGR</th></tr>
+            <tr><td>ALLEN</td><td>WARD</td><td>7698</td></tr>
+            <tr><td>ALLEN</td><td>MARTIN</td><td>7698</td></tr>
+            <tr><td>JONES</td><td>BLAKE</td><td>7839</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Display employees earning more than their manager.</div>
+        <pre class="query">SELECT E.ENAME, E.SAL, M.ENAME AS MGR_NAME, M.SAL AS MGR_SAL 
+FROM SCOTT.EMP E 
+JOIN SCOTT.EMP M ON E.MGR = M.EMPNO 
+WHERE E.SAL > M.SAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>SAL</th><th>MGR_NAME</th><th>MGR_SAL</th></tr>
+            <tr><td>SCOTT</td><td>3000</td><td>JONES</td><td>2975</td></tr>
+            <tr><td>FORD</td><td>3000</td><td>JONES</td><td>2975</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">33. Display employee name and manager salary.</div>
+        <pre class="query">SELECT E.ENAME, M.SAL AS MGR_SAL 
+FROM SCOTT.EMP E 
+JOIN SCOTT.EMP M ON E.MGR = M.EMPNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>MGR_SAL</th></tr>
+            <tr><td>SMITH</td><td>3000</td></tr>
+            <tr><td>ALLEN</td><td>2850</td></tr>
+            <tr><td>WARD</td><td>2850</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">34. Display employees who are managers.</div>
+        <pre class="query">SELECT DISTINCT M.ENAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.EMP M ON E.MGR = M.EMPNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>FORD</td></tr>
+            <tr><td>BLAKE</td></tr>
+            <tr><td>KING</td></tr>
+            <tr><td>JONES</td></tr>
+            <tr><td>SCOTT</td></tr>
+            <tr><td>CLARK</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">35. Display employees who do not have managers.</div>
+        <pre class="query">SELECT ENAME 
+FROM SCOTT.EMP 
+WHERE MGR IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>KING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">36. Display employee name and manager name.</div>
+        <pre class="query">SELECT E.ENAME AS EMP_NAME, M.ENAME AS MGR_NAME 
+FROM SCOTT.EMP E 
+LEFT JOIN SCOTT.EMP M ON E.MGR = M.EMPNO;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>EMP_NAME</th><th>MGR_NAME</th></tr>
+            <tr><td>SMITH</td><td>FORD</td></tr>
+            <tr><td>ALLEN</td><td>BLAKE</td></tr>
+            <tr><td>KING</td><td></td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">37. Display employees whose department location is DALLAS.</div>
+        <pre class="query">SELECT E.ENAME, D.LOC 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE D.LOC = 'DALLAS';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>LOC</th></tr>
+            <tr><td>SMITH</td><td>DALLAS</td></tr>
+            <tr><td>JONES</td><td>DALLAS</td></tr>
+            <tr><td>SCOTT</td><td>DALLAS</td></tr>
+            <tr><td>ADAMS</td><td>DALLAS</td></tr>
+            <tr><td>FORD</td><td>DALLAS</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">38. Display employees whose department is ACCOUNTING.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE D.DNAME = 'ACCOUNTING';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>CLARK</td><td>ACCOUNTING</td></tr>
+            <tr><td>KING</td><td>ACCOUNTING</td></tr>
+            <tr><td>MILLER</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">39. Display employees not working in department 30 with department name.</div>
+        <pre class="query">SELECT E.ENAME, D.DNAME 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.DEPTNO != 30;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>DNAME</th></tr>
+            <tr><td>SMITH</td><td>RESEARCH</td></tr>
+            <tr><td>JONES</td><td>RESEARCH</td></tr>
+            <tr><td>CLARK</td><td>ACCOUNTING</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">40. Display employees whose job is MANAGER with department location.</div>
+        <pre class="query">SELECT E.ENAME, E.JOB, D.LOC 
+FROM SCOTT.EMP E 
+JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO 
+WHERE E.JOB = 'MANAGER';</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>JOB</th><th>LOC</th></tr>
+            <tr><td>JONES</td><td>MANAGER</td><td>DALLAS</td></tr>
+            <tr><td>BLAKE</td><td>MANAGER</td><td>CHICAGO</td></tr>
+            <tr><td>CLARK</td><td>MANAGER</td><td>NEW YORK</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - SET OPERATORS</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: SET OPERATORS (UNION, UNION ALL, INTERSECT, MINUS)</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Display all department numbers from both EMP and DEPT tables using UNION.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+UNION 
+SELECT DEPTNO FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>10</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>40</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Display all department numbers from EMP and DEPT including duplicates using UNION ALL.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+UNION ALL 
+SELECT DEPTNO FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+            <tr><td>10</td></tr>
+            <tr><td>...</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Display department numbers that are present in both EMP and DEPT using INTERSECT.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+INTERSECT 
+SELECT DEPTNO FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>10</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Display department numbers that are present in EMP but not in DEPT using MINUS.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+MINUS 
+SELECT DEPTNO FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Display department numbers that are present in DEPT but not assigned to any employee.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.DEPT 
+MINUS 
+SELECT DEPTNO FROM SCOTT.EMP;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>40</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Display employee names and department names in a single column using UNION.</div>
+        <pre class="query">SELECT ENAME AS NAME FROM SCOTT.EMP 
+UNION 
+SELECT DNAME FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>NAME</th></tr>
+            <tr><td>ACCOUNTING</td></tr>
+            <tr><td>ADAMS</td></tr>
+            <tr><td>ALLEN</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Display all employee names and department names, including duplicates.</div>
+        <pre class="query">SELECT ENAME AS NAME FROM SCOTT.EMP 
+UNION ALL 
+SELECT DNAME FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>NAME</th></tr>
+            <tr><td>SMITH</td></tr>
+            <tr><td>ALLEN</td></tr>
+            <tr><td>...</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Display jobs that exist in EMP table and also exist as department names in DEPT table (use INTERSECT).</div>
+        <pre class="query">SELECT JOB FROM SCOTT.EMP 
+INTERSECT 
+SELECT DNAME FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th></tr>
+            <tr><td>no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Display employee names that are not department names.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP 
+MINUS 
+SELECT DNAME FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>ADAMS</td></tr>
+            <tr><td>ALLEN</td></tr>
+            <tr><td>BLAKE</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Display department locations that are not used by any employee.</div>
+        <pre class="query">SELECT LOC FROM SCOTT.DEPT 
+MINUS 
+SELECT D.LOC FROM SCOTT.DEPT D JOIN SCOTT.EMP E ON D.DEPTNO = E.DEPTNO;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>LOC</th></tr>
+            <tr><td>BOSTON</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Display employee names from department 10 and department 20 using UNION.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 10 
+UNION 
+SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 20;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>ADAMS</td></tr>
+            <tr><td>CLARK</td></tr>
+            <tr><td>FORD</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Display employee names from department 10 and department 20 including duplicates.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 10 
+UNION ALL 
+SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 20;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>CLARK</td></tr>
+            <tr><td>KING</td></tr>
+            <tr><td>SMITH</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Display employees who work in departments that exist in DEPT table using INTERSECT.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO IN (
+    SELECT DEPTNO FROM SCOTT.EMP 
+    INTERSECT 
+    SELECT DEPTNO FROM SCOTT.DEPT
+);</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>SMITH</td></tr>
+            <tr><td>ALLEN</td></tr>
+            <tr><td>WARD</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Display employees whose department does not exist in DEPT table using MINUS.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO IN (
+    SELECT DEPTNO FROM SCOTT.EMP 
+    MINUS 
+    SELECT DEPTNO FROM SCOTT.DEPT
+);</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Display department numbers that have employees and also exist in DEPT table.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP 
+INTERSECT 
+SELECT DEPTNO FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>10</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Display all unique job roles from EMP and all unique department names from DEPT in one result.</div>
+        <pre class="query">SELECT JOB AS CATEGORY FROM SCOTT.EMP 
+UNION 
+SELECT DNAME FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>CATEGORY</th></tr>
+            <tr><td>ACCOUNTING</td></tr>
+            <tr><td>ANALYST</td></tr>
+            <tr><td>CLERK</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Display common values between employee job and department location.</div>
+        <pre class="query">SELECT JOB FROM SCOTT.EMP 
+INTERSECT 
+SELECT LOC FROM SCOTT.DEPT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>JOB</th></tr>
+            <tr><td>no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Display employee names who are not assigned to any valid department.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP 
+WHERE DEPTNO IN (SELECT DEPTNO FROM SCOTT.EMP MINUS SELECT DEPTNO FROM SCOTT.DEPT) 
+OR DEPTNO IS NULL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>no rows selected</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Combine: Employees earning more than 2000 & Employees from department 10 using UNION.</div>
+        <pre class="query">SELECT ENAME, SAL, DEPTNO FROM SCOTT.EMP WHERE SAL > 2000 
+UNION 
+SELECT ENAME, SAL, DEPTNO FROM SCOTT.EMP WHERE DEPTNO = 10;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>SAL</th><th>DEPTNO</th></tr>
+            <tr><td>BLAKE</td><td>2850</td><td>30</td></tr>
+            <tr><td>CLARK</td><td>2450</td><td>10</td></tr>
+            <tr><td>KING</td><td>5000</td><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Display employees who: Work in department 10 but Not in department 20 using MINUS.</div>
+        <pre class="query">SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 10 
+MINUS 
+SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 20;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th></tr>
+            <tr><td>CLARK</td></tr>
+            <tr><td>KING</td></tr>
+            <tr><td>MILLER</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Display department numbers that: Exist in EMP, Exist in DEPT, But exclude department 10.</div>
+        <pre class="query">(SELECT DEPTNO FROM SCOTT.EMP 
+INTERSECT 
+SELECT DEPTNO FROM SCOTT.DEPT) 
+MINUS 
+SELECT 10 FROM DUAL;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>20</td></tr>
+            <tr><td>30</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Display all employee names and department names in a single result sorted alphabetically.</div>
+        <pre class="query">SELECT ENAME AS NAME FROM SCOTT.EMP 
+UNION 
+SELECT DNAME AS NAME FROM SCOTT.DEPT 
+ORDER BY NAME;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>NAME</th></tr>
+            <tr><td>ACCOUNTING</td></tr>
+            <tr><td>ADAMS</td></tr>
+            <tr><td>ALLEN</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Display department numbers that appear in EMP more than once using UNION ALL.</div>
+        <pre class="query">SELECT DEPTNO FROM SCOTT.EMP GROUP BY DEPTNO HAVING COUNT(*) > 1;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>DEPTNO</th></tr>
+            <tr><td>30</td></tr>
+            <tr><td>20</td></tr>
+            <tr><td>10</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Display employees from departments located in NEW YORK and DALLAS using UNION.</div>
+        <pre class="query">SELECT E.ENAME, D.LOC FROM SCOTT.EMP E JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO WHERE D.LOC = 'NEW YORK' 
+UNION 
+SELECT E.ENAME, D.LOC FROM SCOTT.EMP E JOIN SCOTT.DEPT D ON E.DEPTNO = D.DEPTNO WHERE D.LOC = 'DALLAS';</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>LOC</th></tr>
+            <tr><td>CLARK</td><td>NEW YORK</td></tr>
+            <tr><td>SMITH</td><td>DALLAS</td></tr>
+            <tr><td>JONES</td><td>DALLAS</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Combine results of: Employees with salary > 3000 & Employees with job = 'MANAGER' Remove duplicates.</div>
+        <pre class="query">SELECT ENAME, JOB, SAL FROM SCOTT.EMP WHERE SAL > 3000 
+UNION 
+SELECT ENAME, JOB, SAL FROM SCOTT.EMP WHERE JOB = 'MANAGER';</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>ENAME</th><th>JOB</th><th>SAL</th></tr>
+            <tr><td>BLAKE</td><td>MANAGER</td><td>2850</td></tr>
+            <tr><td>CLARK</td><td>MANAGER</td><td>2450</td></tr>
+            <tr><td>JONES</td><td>MANAGER</td><td>2975</td></tr>
+            <tr><td>KING</td><td>PRESIDENT</td><td>5000</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

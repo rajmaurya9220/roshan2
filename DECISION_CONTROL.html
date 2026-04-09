@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - PLSQL Decision Control</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PLSQL: DECISION CONTROL STATEMENT</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a PL/SQL block to check if a number is positive.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 15;
+BEGIN
+    IF v_num > 0 THEN
+        DBMS_OUTPUT.PUT_LINE('The number is positive.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>The number is positive.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Write a PL/SQL block to check if an employee’s salary is greater than 3000.</div>
+        <pre class="query">DECLARE
+    v_sal NUMBER := 4500;
+BEGIN
+    IF v_sal > 3000 THEN
+        DBMS_OUTPUT.PUT_LINE('Salary is greater than 3000.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Salary is greater than 3000.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Write a PL/SQL block to check if a given number is even.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 24;
+BEGIN
+    IF MOD(v_num, 2) = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('The number is even.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>The number is even.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a PL/SQL block to display a message if today is Monday.</div>
+        <pre class="query">DECLARE
+    v_day VARCHAR2(20);
+BEGIN
+    v_day := TO_CHAR(SYSDATE, 'DAY');
+    IF TRIM(v_day) = 'MONDAY' THEN
+        DBMS_OUTPUT.PUT_LINE('Today is Monday! Have a great week ahead.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Write a PL/SQL block to check if a number is divisible by 5.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 25;
+BEGIN
+    IF MOD(v_num, 5) = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Number is divisible by 5.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Number is divisible by 5.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Write a PL/SQL block to check whether a number is even or odd.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 17;
+BEGIN
+    IF MOD(v_num, 2) = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('The number is even.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('The number is odd.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>The number is odd.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Write a PL/SQL block to check whether a number is positive or negative.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := -10;
+BEGIN
+    IF v_num >= 0 THEN
+        DBMS_OUTPUT.PUT_LINE('The number is positive.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('The number is negative.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>The number is negative.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Write a PL/SQL block to compare two numbers and display the greater one.</div>
+        <pre class="query">DECLARE
+    num1 NUMBER := 45;
+    num2 NUMBER := 60;
+BEGIN
+    IF num1 > num2 THEN
+        DBMS_OUTPUT.PUT_LINE('Greater number is: ' || num1);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Greater number is: ' || num2);
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Greater number is: 60<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Write a PL/SQL block to check whether a student passed (marks >= 40) or failed.</div>
+        <pre class="query">DECLARE
+    v_marks NUMBER := 35;
+BEGIN
+    IF v_marks >= 40 THEN
+        DBMS_OUTPUT.PUT_LINE('Result: Passed');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Result: Failed');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Result: Failed<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Write a PL/SQL block to check if salary is above average (use fixed value).</div>
+        <pre class="query">DECLARE
+    v_sal NUMBER := 2500;
+    v_avg_sal NUMBER := 2000;
+BEGIN
+    IF v_sal > v_avg_sal THEN
+        DBMS_OUTPUT.PUT_LINE('Salary is above average.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Salary is below or equal to average.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Salary is above average.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Write a PL/SQL block to assign grades based on marks.</div>
+        <pre class="query">DECLARE
+    v_marks NUMBER := 75;
+BEGIN
+    IF v_marks >= 80 THEN
+        DBMS_OUTPUT.PUT_LINE('Grade: A');
+    ELSIF v_marks >= 60 THEN
+        DBMS_OUTPUT.PUT_LINE('Grade: B');
+    ELSIF v_marks >= 40 THEN
+        DBMS_OUTPUT.PUT_LINE('Grade: C');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Grade: Fail');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grade: B<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Write a PL/SQL block to find the greatest of three numbers.</div>
+        <pre class="query">DECLARE
+    a NUMBER := 10;
+    b NUMBER := 25;
+    c NUMBER := 15;
+BEGIN
+    IF a > b AND a > c THEN
+        DBMS_OUTPUT.PUT_LINE('Greatest is: ' || a);
+    ELSIF b > a AND b > c THEN
+        DBMS_OUTPUT.PUT_LINE('Greatest is: ' || b);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Greatest is: ' || c);
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Greatest is: 25<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Write a PL/SQL block to check if a number is Positive, Negative or Zero.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 0;
+BEGIN
+    IF v_num > 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Number is Positive');
+    ELSIF v_num < 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Number is Negative');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Number is Zero');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Number is Zero<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Write a PL/SQL block to categorize salary.</div>
+        <pre class="query">DECLARE
+    v_sal NUMBER := 4200;
+BEGIN
+    IF v_sal > 5000 THEN
+        DBMS_OUTPUT.PUT_LINE('Category: High');
+    ELSIF v_sal BETWEEN 3000 AND 5000 THEN
+        DBMS_OUTPUT.PUT_LINE('Category: Medium');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Category: Low');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Category: Medium<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Write a PL/SQL block to calculate bonus based on job role.</div>
+        <pre class="query">DECLARE
+    v_job VARCHAR2(20) := 'MANAGER';
+    v_bonus NUMBER;
+BEGIN
+    IF v_job = 'PRESIDENT' THEN
+        v_bonus := 5000;
+    ELSIF v_job = 'MANAGER' THEN
+        v_bonus := 2000;
+    ELSIF v_job = 'ANALYST' THEN
+        v_bonus := 1000;
+    ELSE
+        v_bonus := 500;
+    END IF;
+    DBMS_OUTPUT.PUT_LINE('Bonus for ' || v_job || ' is ' || v_bonus);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Bonus for MANAGER is 2000<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Write a PL/SQL block using CASE to display day of week based on number (1–7).</div>
+        <pre class="query">DECLARE
+    v_day_num NUMBER := 3;
+    v_day_name VARCHAR2(15);
+BEGIN
+    v_day_name := CASE v_day_num
+        WHEN 1 THEN 'Sunday'
+        WHEN 2 THEN 'Monday'
+        WHEN 3 THEN 'Tuesday'
+        WHEN 4 THEN 'Wednesday'
+        WHEN 5 THEN 'Thursday'
+        WHEN 6 THEN 'Friday'
+        WHEN 7 THEN 'Saturday'
+        ELSE 'Invalid Day'
+    END;
+    DBMS_OUTPUT.PUT_LINE('Day is: ' || v_day_name);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Day is: Tuesday<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Write a PL/SQL block using CASE to assign grades based on marks.</div>
+        <pre class="query">DECLARE
+    v_marks NUMBER := 85;
+    v_grade VARCHAR2(10);
+BEGIN
+    CASE 
+        WHEN v_marks >= 80 THEN v_grade := 'A';
+        WHEN v_marks >= 60 THEN v_grade := 'B';
+        WHEN v_marks >= 40 THEN v_grade := 'C';
+        ELSE v_grade := 'Fail';
+    END CASE;
+    DBMS_OUTPUT.PUT_LINE('Grade: ' || v_grade);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grade: A<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Write a PL/SQL block using CASE to check whether a number is even or odd.</div>
+        <pre class="query">DECLARE
+    v_num NUMBER := 9;
+BEGIN
+    CASE MOD(v_num, 2)
+        WHEN 0 THEN DBMS_OUTPUT.PUT_LINE('Even Number');
+        ELSE DBMS_OUTPUT.PUT_LINE('Odd Number');
+    END CASE;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Odd Number<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Write a PL/SQL block using CASE to display department name based on department id.</div>
+        <pre class="query">DECLARE
+    v_deptno NUMBER := 20;
+    v_dname VARCHAR2(20);
+BEGIN
+    v_dname := CASE v_deptno
+        WHEN 10 THEN 'ACCOUNTING'
+        WHEN 20 THEN 'RESEARCH'
+        WHEN 30 THEN 'SALES'
+        WHEN 40 THEN 'OPERATIONS'
+        ELSE 'UNKNOWN DEPT'
+    END;
+    DBMS_OUTPUT.PUT_LINE('Department Name: ' || v_dname);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Department Name: RESEARCH<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Write a PL/SQL block using CASE to categorize salary (High/Medium/Low).</div>
+        <pre class="query">DECLARE
+    v_sal NUMBER := 2500;
+    v_category VARCHAR2(10);
+BEGIN
+    v_category := CASE
+        WHEN v_sal > 5000 THEN 'High'
+        WHEN v_sal BETWEEN 3000 AND 5000 THEN 'Medium'
+        ELSE 'Low'
+    END;
+    DBMS_OUTPUT.PUT_LINE('Salary Category: ' || v_category);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Salary Category: Low<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Write a PL/SQL block to print numbers from 1 to 10 but skip number 5 using CONTINUE.</div>
+        <pre class="query">DECLARE
+    i NUMBER := 1;
+BEGIN
+    FOR i IN 1..10 LOOP
+        IF i = 5 THEN
+            CONTINUE;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE(i);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>1<br>2<br>3<br>4<br>6<br>7<br>8<br>9<br>10<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Write a PL/SQL block to display only odd numbers between 1 and 20 using CONTINUE.</div>
+        <pre class="query">BEGIN
+    FOR i IN 1..20 LOOP
+        IF MOD(i, 2) = 0 THEN
+            CONTINUE;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE(i);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>1<br>3<br>5<br>7<br>9<br>11<br>13<br>15<br>17<br>19<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Write a PL/SQL block to skip multiples of 3 while printing numbers 1–15.</div>
+        <pre class="query">BEGIN
+    FOR i IN 1..15 LOOP
+        IF MOD(i, 3) = 0 THEN
+            CONTINUE;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE(i);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>1<br>2<br>4<br>5<br>7<br>8<br>10<br>11<br>13<br>14<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Write a PL/SQL block to skip employees with salary less than 2000 (use loop).</div>
+        <pre class="query">BEGIN
+    FOR rec IN (SELECT ENAME, SAL FROM SCOTT.EMP) LOOP
+        IF rec.SAL < 2000 THEN
+            CONTINUE;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ' earns ' || rec.SAL);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>JONES earns 2975<br>BLAKE earns 2850<br>CLARK earns 2450<br>SCOTT earns 3000<br>KING earns 5000<br>FORD earns 3000<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Write a PL/SQL block to exit loop when number reaches 5.</div>
+        <pre class="query">DECLARE
+    i NUMBER := 1;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Iteration: ' || i);
+        IF i = 5 THEN
+            EXIT;
+        END IF;
+        i := i + 1;
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Iteration: 1<br>Iteration: 2<br>Iteration: 3<br>Iteration: 4<br>Iteration: 5<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Write a PL/SQL block to print numbers until sum exceeds 50, then exit.</div>
+        <pre class="query">DECLARE
+    i NUMBER := 1;
+    v_sum NUMBER := 0;
+BEGIN
+    LOOP
+        v_sum := v_sum + i;
+        DBMS_OUTPUT.PUT_LINE('Number: ' || i || ', Current Sum: ' || v_sum);
+        IF v_sum > 50 THEN
+            DBMS_OUTPUT.PUT_LINE('Sum exceeded 50. Exiting...');
+            EXIT;
+        END IF;
+        i := i + 1;
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Number: 1, Current Sum: 1<br>Number: 2, Current Sum: 3<br>Number: 3, Current Sum: 6<br>Number: 4, Current Sum: 10<br>Number: 5, Current Sum: 15<br>Number: 6, Current Sum: 21<br>Number: 7, Current Sum: 28<br>Number: 8, Current Sum: 36<br>Number: 9, Current Sum: 45<br>Number: 10, Current Sum: 55<br>Sum exceeded 50. Exiting...<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Write a PL/SQL block to exit loop when a negative number is encountered.</div>
+        <pre class="query">DECLARE
+    TYPE num_varray IS VARRAY(5) OF NUMBER;
+    v_nums num_varray := num_varray(10, 20, -5, 40, 50);
+BEGIN
+    FOR i IN 1..v_nums.COUNT LOOP
+        IF v_nums(i) < 0 THEN
+            DBMS_OUTPUT.PUT_LINE('Negative number found. Exiting.');
+            EXIT;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE('Processing number: ' || v_nums(i));
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Processing number: 10<br>Processing number: 20<br>Negative number found. Exiting.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Write a PL/SQL block using EXIT WHEN to stop loop when condition is met.</div>
+        <pre class="query">DECLARE
+    i NUMBER := 1;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Value: ' || i);
+        EXIT WHEN i = 3;
+        i := i + 1;
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Value: 1<br>Value: 2<br>Value: 3<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Write a PL/SQL block using IF-ELSIF and CASE together.</div>
+        <pre class="query">DECLARE
+    v_val NUMBER := 2;
+    v_role VARCHAR2(10) := 'ADMIN';
+BEGIN
+    IF v_val > 0 THEN
+        CASE v_role
+            WHEN 'ADMIN' THEN DBMS_OUTPUT.PUT_LINE('Positive Value with Admin Rights');
+            WHEN 'GUEST' THEN DBMS_OUTPUT.PUT_LINE('Positive Value with Guest Rights');
+            ELSE DBMS_OUTPUT.PUT_LINE('Unknown Role');
+        END CASE;
+    ELSIF v_val < 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Negative Value');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Zero Value');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Positive Value with Admin Rights<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Write a PL/SQL block to process employee salaries using LOOP, CONTINUE, and EXIT.</div>
+        <pre class="query">DECLARE
+    CURSOR emp_cur IS SELECT ENAME, SAL FROM SCOTT.EMP;
+    v_count NUMBER := 0;
+BEGIN
+    FOR rec IN emp_cur LOOP
+        -- Skip salaries below 1500
+        IF rec.SAL < 1500 THEN
+            CONTINUE;
+        END IF;
+        
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ' Salary: ' || rec.SAL);
+        v_count := v_count + 1;
+        
+        -- Exit after printing 3 high salaries
+        EXIT WHEN v_count = 3;
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output (Sample):</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>ALLEN Salary: 1600<br>JONES Salary: 2975<br>BLAKE Salary: 2850<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Write a PL/SQL block to simulate a login system (check username & password using IF-ELSE).</div>
+        <pre class="query">DECLARE
+    v_user VARCHAR2(20) := 'ADMIN';
+    v_pass VARCHAR2(20) := 'PASS123';
+    
+    in_user VARCHAR2(20) := 'ADMIN';
+    in_pass VARCHAR2(20) := 'WRONG';
+BEGIN
+    IF in_user = v_user AND in_pass = v_pass THEN
+        DBMS_OUTPUT.PUT_LINE('Login Successful! Welcome ' || in_user);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Login Failed. Invalid Username or Password.');
+    END IF;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Login Failed. Invalid Username or Password.<br><br>PL/SQL procedure successfully completed.</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>

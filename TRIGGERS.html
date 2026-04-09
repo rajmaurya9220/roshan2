@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - PL/SQL Triggers</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-text {
+            background-color: #f4f6f7; color: #2c3e50; padding: 15px;
+            border-left: 4px solid #3498db; border-radius: 0 4px 4px 0;
+            font-family: Consolas, monospace; font-size: 14px; margin: 0;
+            white-space: pre; overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PLSQL: TRIGGERS (BEFORE, AFTER, ROW, STATEMENT LEVEL)</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a trigger to display a message whenever a record is inserted into EMP table.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_ins_emp
+AFTER INSERT ON SCOTT.EMP
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('A new record has been inserted into EMP table.');
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_INS_EMP compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Write a trigger that fires before inserting data into EMP table.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_bef_ins
+BEFORE INSERT ON SCOTT.EMP
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Trigger firing BEFORE insertion...');
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_BEF_INS compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Write a trigger that fires after deleting a record from EMP table.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_aft_del
+AFTER DELETE ON SCOTT.EMP
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Record deleted successfully.');
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_AFT_DEL compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a trigger to prevent deletion from EMP table.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_no_del
+BEFORE DELETE ON SCOTT.EMP
+BEGIN
+    RAISE_APPLICATION_ERROR(-20001, 'Deletion from EMP table is not allowed.');
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_NO_DEL compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Write a trigger to display a message when employee salary is updated.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_aft_upd_sal
+AFTER UPDATE OF SAL ON SCOTT.EMP
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Salary information has been updated.');
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_AFT_UPD_SAL compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Write a row-level trigger to display old and new salary when salary is updated.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_sal_audit
+AFTER UPDATE OF SAL ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Old Salary: ' || :OLD.SAL || ' | New Salary: ' || :NEW.SAL);
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_SAL_AUDIT compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Write a trigger to restrict salary update if new salary is less than old salary.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_restrict_sal
+BEFORE UPDATE OF SAL ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    IF :NEW.SAL < :OLD.SAL THEN
+        RAISE_APPLICATION_ERROR(-20002, 'New salary cannot be less than old salary.');
+    END IF;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_RESTRICT_SAL compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Write a trigger to automatically set hiredate while inserting employee record.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_set_hiredate
+BEFORE INSERT ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    :NEW.HIREDATE := SYSDATE;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_SET_HIREDATE compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Write a trigger to increase salary by 5% before updating.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_auto_raise
+BEFORE UPDATE OF SAL ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    :NEW.SAL := :NEW.SAL * 1.05;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_AUTO_RAISE compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Write a trigger to copy deleted records into another table (audit table).</div>
+        <pre class="query">-- Assume EMP_LOG table exists with same structure
+CREATE OR REPLACE TRIGGER trg_copy_deleted
+AFTER DELETE ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    INSERT INTO EMP_LOG (EMPNO, ENAME, SAL, DEPTNO)
+    VALUES (:OLD.EMPNO, :OLD.ENAME, :OLD.SAL, :OLD.DEPTNO);
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_COPY_DELETED compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Write a statement-level trigger to display message when any insert occurs on EMP table.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_stmt_ins
+AFTER INSERT ON SCOTT.EMP
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Statement Level: Insert operation complete.');
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_STMT_INS compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Write a BEFORE trigger to validate salary before inserting.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_val_sal
+BEFORE INSERT ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    IF :NEW.SAL < 500 THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Salary is too low.');
+    END IF;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_VAL_SAL compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Write a trigger that fires only when salary > 5000.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_high_sal
+AFTER UPDATE ON SCOTT.EMP
+FOR EACH ROW
+WHEN (NEW.SAL > 5000)
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Warning: Salary exceeded 5000 for ' || :NEW.ENAME);
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_HIGH_SAL compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Write a trigger to allow insert only during working hours (9 AM to 5 PM).</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_work_hours
+BEFORE INSERT ON SCOTT.EMP
+BEGIN
+    IF TO_CHAR(SYSDATE, 'HH24') NOT BETWEEN '09' AND '17' THEN
+        RAISE_APPLICATION_ERROR(-20005, 'Insertions only allowed during working hours.');
+    END IF;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_WORK_HOURS compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Write a trigger to prevent update on weekends.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_no_weekend
+BEFORE UPDATE ON SCOTT.EMP
+BEGIN
+    IF TO_CHAR(SYSDATE, 'DY') IN ('SAT', 'SUN') THEN
+        RAISE_APPLICATION_ERROR(-20006, 'Updates not allowed on weekends.');
+    END IF;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_NO_WEEKEND compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Write a trigger to maintain audit table for INSERT, UPDATE, DELETE.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_full_audit
+AFTER INSERT OR UPDATE OR DELETE ON SCOTT.EMP
+FOR EACH ROW
+DECLARE
+    v_op VARCHAR2(10);
+BEGIN
+    IF INSERTING THEN v_op := 'INSERT';
+    ELSIF UPDATING THEN v_op := 'UPDATE';
+    ELSE v_op := 'DELETE';
+    END IF;
+    -- Assume AUDIT_LOG(operation, username, timestamp) exists
+    INSERT INTO AUDIT_LOG VALUES (v_op, USER, SYSDATE);
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_FULL_AUDIT compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Write a trigger to generate automatic employee ID.</div>
+        <pre class="query">-- Assume sequence EMP_SEQ exists
+CREATE OR REPLACE TRIGGER trg_auto_id
+BEFORE INSERT ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    SELECT EMP_SEQ.NEXTVAL INTO :NEW.EMPNO FROM DUAL;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_AUTO_ID compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Write a trigger to prevent duplicate employee names.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_unique_name
+BEFORE INSERT OR UPDATE OF ENAME ON SCOTT.EMP
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM SCOTT.EMP WHERE ENAME = :NEW.ENAME;
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20010, 'Employee name must be unique.');
+    END IF;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_UNIQUE_NAME compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Write a trigger to log user activity (who updated, when updated).</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_user_log
+AFTER UPDATE ON SCOTT.EMP
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Updated by: ' || USER || ' on ' || SYSDATE);
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_USER_LOG compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Write a trigger to restrict salary update beyond 20%.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_sal_limit
+BEFORE UPDATE OF SAL ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    IF :NEW.SAL > :OLD.SAL * 1.20 THEN
+        RAISE_APPLICATION_ERROR(-20011, 'Salary increase cannot exceed 20%.');
+    END IF;
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_SAL_LIMIT compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Write a trigger to maintain history table for salary changes.</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_sal_history
+AFTER UPDATE OF SAL ON SCOTT.EMP
+FOR EACH ROW
+BEGIN
+    INSERT INTO SAL_HISTORY (EMPNO, OLD_SAL, NEW_SAL, CHANGE_DATE)
+    VALUES (:OLD.EMPNO, :OLD.SAL, :NEW.SAL, SYSDATE);
+END;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_SAL_HISTORY compiled</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Write a compound trigger (advanced Oracle feature).</div>
+        <pre class="query">CREATE OR REPLACE TRIGGER trg_compound_emp
+FOR UPDATE OF SAL ON SCOTT.EMP
+COMPOUND TRIGGER
+    BEFORE STATEMENT IS BEGIN 
+        DBMS_OUTPUT.PUT_LINE('Starting bulk update...'); 
+    END BEFORE STATEMENT;
+    
+    AFTER EACH ROW IS BEGIN 
+        DBMS_OUTPUT.PUT_LINE('Updating Row: ' || :OLD.ENAME); 
+    END AFTER EACH ROW;
+END trg_compound_emp;
+/</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Trigger TRG_COMPOUND_EMP compiled</pre>
+    </div>
+
+</body>
+</html>

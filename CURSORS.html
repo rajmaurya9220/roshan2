@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - PL/SQL Cursors</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-text {
+            background-color: #f4f6f7; color: #2c3e50; padding: 15px;
+            border-left: 4px solid #3498db; border-radius: 0 4px 4px 0;
+            font-family: Consolas, monospace; font-size: 14px; margin: 0;
+            white-space: pre; overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: PL/SQL Cursors (FOR Loop, Parameterized, Updatable)</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Write a PL/SQL block to declare a cursor to fetch all employees from EMP table and display their names.</div>
+        <pre class="query">DECLARE
+    CURSOR c_emp IS SELECT ENAME FROM SCOTT.EMP;
+    v_ename SCOTT.EMP.ENAME%TYPE;
+BEGIN
+    OPEN c_emp;
+    LOOP
+        FETCH c_emp INTO v_ename;
+        EXIT WHEN c_emp%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('Employee Name: ' || v_ename);
+    END LOOP;
+    CLOSE c_emp;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Employee Name: SMITH
+Employee Name: ALLEN
+Employee Name: WARD
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Write a PL/SQL block to fetch employee name and salary using cursor and display them.</div>
+        <pre class="query">DECLARE
+    CURSOR c_emp_sal IS SELECT ENAME, SAL FROM SCOTT.EMP;
+    v_ename SCOTT.EMP.ENAME%TYPE;
+    v_sal SCOTT.EMP.SAL%TYPE;
+BEGIN
+    OPEN c_emp_sal;
+    LOOP
+        FETCH c_emp_sal INTO v_ename, v_sal;
+        EXIT WHEN c_emp_sal%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('Name: ' || v_ename || ' Salary: ' || v_sal);
+    END LOOP;
+    CLOSE c_emp_sal;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Name: SMITH Salary: 800
+Name: ALLEN Salary: 1600
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Write a PL/SQL block to display employees whose salary is greater than 3000 using cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_high_sal IS SELECT ENAME, SAL FROM SCOTT.EMP WHERE SAL > 3000;
+    v_ename SCOTT.EMP.ENAME%TYPE;
+    v_sal SCOTT.EMP.SAL%TYPE;
+BEGIN
+    OPEN c_high_sal;
+    LOOP
+        FETCH c_high_sal INTO v_ename, v_sal;
+        EXIT WHEN c_high_sal%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_ename || ' earns ' || v_sal);
+    END LOOP;
+    CLOSE c_high_sal;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">KING earns 5000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Write a PL/SQL block to count number of employees using cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_count IS SELECT * FROM SCOTT.EMP;
+    v_emp SCOTT.EMP%ROWTYPE;
+    v_counter NUMBER := 0;
+BEGIN
+    OPEN c_count;
+    LOOP
+        FETCH c_count INTO v_emp;
+        EXIT WHEN c_count%NOTFOUND;
+        v_counter := v_counter + 1;
+    END LOOP;
+    CLOSE c_count;
+    DBMS_OUTPUT.PUT_LINE('Total Employees: ' || v_counter);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Total Employees: 14</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Write a PL/SQL block to calculate total salary of all employees using cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_sal IS SELECT SAL FROM SCOTT.EMP;
+    v_sal SCOTT.EMP.SAL%TYPE;
+    v_total NUMBER := 0;
+BEGIN
+    OPEN c_sal;
+    LOOP
+        FETCH c_sal INTO v_sal;
+        EXIT WHEN c_sal%NOTFOUND;
+        v_total := v_total + v_sal;
+    END LOOP;
+    CLOSE c_sal;
+    DBMS_OUTPUT.PUT_LINE('Grand Total Salary: ' || v_total);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Grand Total Salary: 29025</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Write a PL/SQL block to fetch records one by one using OPEN, FETCH, and CLOSE.</div>
+        <pre class="query">DECLARE
+    CURSOR c_manual IS SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 10;
+    v_name VARCHAR2(20);
+BEGIN
+    OPEN c_manual;
+    FETCH c_manual INTO v_name;
+    DBMS_OUTPUT.PUT_LINE('Record 1: ' || v_name);
+    FETCH c_manual INTO v_name;
+    DBMS_OUTPUT.PUT_LINE('Record 2: ' || v_name);
+    CLOSE c_manual;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Record 1: CLARK
+Record 2: KING</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Write a PL/SQL block to display all employee records using cursor FOR LOOP.</div>
+        <pre class="query">BEGIN
+    FOR emp_rec IN (SELECT * FROM SCOTT.EMP) LOOP
+        DBMS_OUTPUT.PUT_LINE('Emp: ' || emp_rec.ENAME || ' | Job: ' || emp_rec.JOB);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Emp: SMITH | Job: CLERK
+Emp: ALLEN | Job: SALESMAN
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Write a PL/SQL block to display employee names and jobs using cursor FOR LOOP.</div>
+        <pre class="query">DECLARE
+    CURSOR c_info IS SELECT ENAME, JOB FROM SCOTT.EMP;
+BEGIN
+    FOR rec IN c_info LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ' works as ' || rec.JOB);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">SMITH works as CLERK
+ALLEN works as SALESMAN
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Write a PL/SQL block to display employees from department 10 using cursor FOR LOOP.</div>
+        <pre class="query">BEGIN
+    FOR rec IN (SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = 10) LOOP
+        DBMS_OUTPUT.PUT_LINE('Dept 10 Employee: ' || rec.ENAME);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Dept 10 Employee: CLARK
+Dept 10 Employee: KING
+Dept 10 Employee: MILLER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Write a PL/SQL block to calculate total salary using cursor FOR LOOP.</div>
+        <pre class="query">DECLARE
+    v_total NUMBER := 0;
+BEGIN
+    FOR rec IN (SELECT SAL FROM SCOTT.EMP) LOOP
+        v_total := v_total + rec.SAL;
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Total sum of Salary: ' || v_total);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Total sum of Salary: 29025</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Write a PL/SQL block to display employees with salary greater than average using cursor FOR LOOP.</div>
+        <pre class="query">BEGIN
+    FOR rec IN (SELECT ENAME, SAL FROM SCOTT.EMP WHERE SAL > (SELECT AVG(SAL) FROM SCOTT.EMP)) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ' earns ' || rec.SAL || ' (Above Average)');
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">JONES earns 2975 (Above Average)
+BLAKE earns 2850 (Above Average)
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Write a PL/SQL block to declare a parameterized cursor that takes department number and displays employees of that department.</div>
+        <pre class="query">DECLARE
+    CURSOR c_dept_emp (p_deptno NUMBER) IS
+        SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = p_deptno;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Employees for Dept 20:');
+    FOR rec IN c_dept_emp(20) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Employees for Dept 20:
+SMITH
+JONES
+SCOTT
+ADAMS
+FORD</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Write a PL/SQL block to fetch employees whose salary is greater than a given value using parameterized cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_sal_filter (p_min_sal NUMBER) IS
+        SELECT ENAME, SAL FROM SCOTT.EMP WHERE SAL > p_min_sal;
+BEGIN
+    FOR rec IN c_sal_filter(2500) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ': ' || rec.SAL);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">JONES: 2975
+BLAKE: 2850
+SCOTT: 3000
+KING: 5000
+FORD: 3000</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Write a PL/SQL block to display employees based on job role using parameterized cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_job_filter (p_job VARCHAR2) IS
+        SELECT ENAME FROM SCOTT.EMP WHERE JOB = p_job;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Analysts:');
+    FOR rec IN c_job_filter('ANALYST') LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Analysts:
+SCOTT
+FORD</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Write a PL/SQL block to calculate total salary of a given department using parameterized cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_dept_sal (p_deptno NUMBER) IS
+        SELECT SAL FROM SCOTT.EMP WHERE DEPTNO = p_deptno;
+    v_total NUMBER := 0;
+BEGIN
+    FOR rec IN c_dept_sal(30) LOOP
+        v_total := v_total + rec.SAL;
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Total Salary for Dept 30: ' || v_total);
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Total Salary for Dept 30: 9400</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Write a PL/SQL block to pass multiple parameters (deptno, job) to cursor and display matching records.</div>
+        <pre class="query">DECLARE
+    CURSOR c_multi (p_dept NUMBER, p_job VARCHAR2) IS
+        SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = p_dept AND JOB = p_job;
+BEGIN
+    FOR rec IN c_multi(30, 'SALESMAN') LOOP
+        DBMS_OUTPUT.PUT_LINE('Found: ' || rec.ENAME);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Found: ALLEN
+Found: WARD
+Found: MARTIN
+Found: TURNER</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Write a PL/SQL block to update salary of employees using cursor with FOR UPDATE.</div>
+        <pre class="query">DECLARE
+    CURSOR c_upd IS SELECT SAL FROM SCOTT.EMP FOR UPDATE;
+BEGIN
+    FOR rec IN c_upd LOOP
+        UPDATE SCOTT.EMP SET SAL = SAL + 10 WHERE CURRENT OF c_upd;
+    END LOOP;
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Write a PL/SQL block to increase salary by 10% for employees using WHERE CURRENT OF.</div>
+        <pre class="query">DECLARE
+    CURSOR c_upd_sal IS SELECT SAL FROM SCOTT.EMP WHERE DEPTNO = 20 FOR UPDATE;
+BEGIN
+    FOR rec IN c_upd_sal LOOP
+        UPDATE SCOTT.EMP SET SAL = SAL * 1.10 WHERE CURRENT OF c_upd_sal;
+    END LOOP;
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Write a PL/SQL block to delete employees with salary less than 2000 using cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_del IS SELECT SAL FROM SCOTT.EMP WHERE SAL < 2000 FOR UPDATE;
+BEGIN
+    FOR rec IN c_del LOOP
+        DELETE FROM SCOTT.EMP WHERE CURRENT OF c_del;
+    END LOOP;
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Write a PL/SQL block to update job of employees using updatable cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_job_upd IS SELECT JOB FROM SCOTT.EMP WHERE ENAME = 'SMITH' FOR UPDATE;
+BEGIN
+    FOR rec IN c_job_upd LOOP
+        UPDATE SCOTT.EMP SET JOB = 'ANALYST' WHERE CURRENT OF c_job_upd;
+    END LOOP;
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Write a PL/SQL block to fetch records using cursor and modify values row-by-row.</div>
+        <pre class="query">DECLARE
+    CURSOR c_edit IS SELECT COMM FROM SCOTT.EMP FOR UPDATE;
+BEGIN
+    FOR rec IN c_edit LOOP
+        IF rec.COMM IS NULL THEN
+            UPDATE SCOTT.EMP SET COMM = 500 WHERE CURRENT OF c_edit;
+        END IF;
+    END LOOP;
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Write a PL/SQL block using explicit cursor and IF condition to display high salary employees.</div>
+        <pre class="query">DECLARE
+    CURSOR c_emp IS SELECT ENAME, SAL FROM SCOTT.EMP;
+    v_rec c_emp%ROWTYPE;
+BEGIN
+    OPEN c_emp;
+    LOOP
+        FETCH c_emp INTO v_rec;
+        EXIT WHEN c_emp%NOTFOUND;
+        IF v_rec.SAL > 2500 THEN
+            DBMS_OUTPUT.PUT_LINE(v_rec.ENAME || ' is a high earner.');
+        END IF;
+    END LOOP;
+    CLOSE c_emp;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">JONES is a high earner.
+BLAKE is a high earner.
+SCOTT is a high earner.
+KING is a high earner.
+FORD is a high earner.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Write a PL/SQL block using cursor FOR LOOP and calculate bonus (10% of salary).</div>
+        <pre class="query">BEGIN
+    FOR rec IN (SELECT ENAME, SAL FROM SCOTT.EMP) LOOP
+        DBMS_OUTPUT.PUT_LINE(rec.ENAME || ' Bonus: ' || (rec.SAL * 0.10));
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">SMITH Bonus: 80
+ALLEN Bonus: 160
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Write a PL/SQL block using parameterized cursor and loop through multiple departments.</div>
+        <pre class="query">DECLARE
+    CURSOR c_dept_data (p_dept NUMBER) IS SELECT ENAME FROM SCOTT.EMP WHERE DEPTNO = p_dept;
+BEGIN
+    FOR d IN (SELECT DISTINCT DEPTNO FROM SCOTT.DEPT) LOOP
+        DBMS_OUTPUT.PUT_LINE('--- Dept: ' || d.DEPTNO || ' ---');
+        FOR e IN c_dept_data(d.DEPTNO) LOOP
+            DBMS_OUTPUT.PUT_LINE(e.ENAME);
+        END LOOP;
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">--- Dept: 10 ---
+CLARK
+KING
+MILLER
+--- Dept: 20 ---
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Write a PL/SQL block to update and display employee data using updatable cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_upd IS SELECT ENAME, SAL FROM SCOTT.EMP WHERE DEPTNO = 30 FOR UPDATE;
+BEGIN
+    FOR rec IN c_upd LOOP
+        UPDATE SCOTT.EMP SET SAL = SAL + 100 WHERE CURRENT OF c_upd;
+        DBMS_OUTPUT.PUT_LINE('Updated ' || rec.ENAME);
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Updated ALLEN
+Updated WARD
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Write a PL/SQL block to display top 3 highest paid employees using cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_top IS SELECT ENAME, SAL FROM SCOTT.EMP ORDER BY SAL DESC;
+    v_name VARCHAR2(20);
+    v_sal NUMBER;
+BEGIN
+    OPEN c_top;
+    FOR i IN 1..3 LOOP
+        FETCH c_top INTO v_name, v_sal;
+        DBMS_OUTPUT.PUT_LINE(i || '. ' || v_name || ' (' || v_sal || ')');
+    END LOOP;
+    CLOSE c_top;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">1. KING (5000)
+2. SCOTT (3000)
+3. FORD (3000)</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Write a PL/SQL block to simulate pagination (fetch limited rows using cursor).</div>
+        <pre class="query">DECLARE
+    CURSOR c_page IS SELECT ENAME FROM SCOTT.EMP;
+    v_name VARCHAR2(20);
+BEGIN
+    OPEN c_page;
+    FOR i IN 1..5 LOOP
+        FETCH c_page INTO v_name;
+        DBMS_OUTPUT.PUT_LINE('Row ' || i || ': ' || v_name);
+    END LOOP;
+    CLOSE c_page;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Row 1: SMITH
+Row 2: ALLEN
+...</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Write a PL/SQL block to copy employee data into another table using cursor.</div>
+        <pre class="query">BEGIN
+    FOR rec IN (SELECT * FROM SCOTT.EMP) LOOP
+        INSERT INTO EMP_BACKUP VALUES (rec.EMPNO, rec.ENAME, rec.JOB, rec.MGR, rec.HIREDATE, rec.SAL, rec.COMM, rec.DEPTNO);
+    END LOOP;
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Write a PL/SQL block to display department-wise employee count using cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_dept_cnt IS SELECT DEPTNO, COUNT(*) as CNT FROM SCOTT.EMP GROUP BY DEPTNO;
+BEGIN
+    FOR rec IN c_dept_cnt LOOP
+        DBMS_OUTPUT.PUT_LINE('Dept ' || rec.DEPTNO || ' has ' || rec.CNT || ' employees.');
+    END LOOP;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">Dept 10 has 3 employees.
+Dept 20 has 5 employees.
+Dept 30 has 6 employees.</pre>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Write a PL/SQL block to process employee records and apply different salary increments based on job using cursor.</div>
+        <pre class="query">DECLARE
+    CURSOR c_emp IS SELECT ENAME, JOB, SAL FROM SCOTT.EMP FOR UPDATE;
+BEGIN
+    FOR rec IN c_emp LOOP
+        IF rec.JOB = 'CLERK' THEN
+            UPDATE SCOTT.EMP SET SAL = SAL + 500 WHERE CURRENT OF c_emp;
+        ELSIF rec.JOB = 'SALESMAN' THEN
+            UPDATE SCOTT.EMP SET SAL = SAL + 200 WHERE CURRENT OF c_emp;
+        ELSE
+            UPDATE SCOTT.EMP SET SAL = SAL + 100 WHERE CURRENT OF c_emp;
+        END IF;
+    END LOOP;
+    COMMIT;
+END;</pre>
+        <div class="output-label">Output:</div>
+        <pre class="output-text">PL/SQL procedure successfully completed.</pre>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Practical File - TCL & DCL</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px auto;
+            max-width: 950px;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 { margin: 5px 0; font-size: 26px; color: #2c3e50; }
+        .header h2 { margin: 5px 0; font-size: 20px; font-weight: normal; }
+        .header h3 { margin: 5px 0; font-size: 18px; color: #555; }
+        .student-info { text-align: right; margin-bottom: 30px; font-size: 16px; }
+        .student-info p { margin: 2px 0; font-weight: 600; }
+        .schema {
+            font-size: 15px; color: #444; margin-bottom: 30px; padding: 15px;
+            background: #e8f4f8; border-left: 5px solid #3498db; border-radius: 4px;
+        }
+        .schema p { margin: 5px 0; font-family: Consolas, monospace; }
+        .question-block {
+            margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0;
+            border-radius: 6px; background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            page-break-inside: avoid;
+        }
+        .question { font-weight: 600; margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+        .query {
+            background-color: #272822; color: #f8f8f2; padding: 12px; border-radius: 4px;
+            font-family: Consolas, monospace; overflow-x: auto; margin: 0 0 15px 0;
+            white-space: pre-wrap;
+        }
+        .output-label { font-weight: bold; font-size: 14px; color: #2c3e50; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .output-table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Consolas, monospace; }
+        .output-table th, .output-table td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; }
+        .output-table th { background-color: #f4f6f7; color: #333; font-weight: 600; }
+        .output-table tr:nth-child(even) { background-color: #fafafa; }
+        .output-table tr:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Panjab University, Chandigarh</h1>
+        <h2>Post Graduate Government College (PGGC), Sector 11</h2>
+        <h3>BCA (Semester 4) - Database Management System Practical</h3>
+        <h3>Topic: TRANSACTION CONTROL LANGUAGE (TCL) and DATA CONTROL LANGUAGE (DCL)</h3>
+    </div>
+
+    <div class="student-info">
+        <p>Submitted By: Roshan Das</p>
+    </div>
+
+    <div class="schema">
+        <strong>Database Schema Reference (SCOTT):</strong>
+        <p>SCOTT.EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)</p>
+        <p>SCOTT.DEPT (DEPTNO, DNAME, LOC)</p>
+    </div>
+
+    <div class="question-block">
+        <div class="question">1. Grant SELECT privilege on EMP table to a user named USER1. (GRANT – BASIC SELECT)</div>
+        <pre class="query">GRANT SELECT ON SCOTT.EMP TO USER1;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">2. Grant SELECT and INSERT privileges on EMP table to USER2. (GRANT – MULTIPLE PRIVILEGES)</div>
+        <pre class="query">GRANT SELECT, INSERT ON SCOTT.EMP TO USER2;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">3. Grant all privileges on DEPT table to USER3. (GRANT – ALL PRIVILEGES)</div>
+        <pre class="query">GRANT ALL ON SCOTT.DEPT TO USER3;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">4. Grant SELECT privilege on EMP table to USER4 with GRANT OPTION. (GRANT – WITH GRANT OPTION)</div>
+        <pre class="query">GRANT SELECT ON SCOTT.EMP TO USER4 WITH GRANT OPTION;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">5. Grant UPDATE privilege only on SAL column of EMP table to USER5. (GRANT – COLUMN LEVEL)</div>
+        <pre class="query">GRANT UPDATE (SAL) ON SCOTT.EMP TO USER5;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">6. Grant DELETE privilege on EMP table to USER6. (GRANT – DELETE)</div>
+        <pre class="query">GRANT DELETE ON SCOTT.EMP TO USER6;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">7. Grant SELECT privilege on both EMP and DEPT tables to USER7. (GRANT – MULTIPLE TABLES)</div>
+        <pre class="query">GRANT SELECT ON SCOTT.EMP TO USER7;
+GRANT SELECT ON SCOTT.DEPT TO USER7;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">8. Grant privileges on EMP table to PUBLIC. (GRANT – PUBLIC ACCESS)</div>
+        <pre class="query">GRANT SELECT ON SCOTT.EMP TO PUBLIC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">9. Grant INSERT privilege on EMP table to USER8 with the ability to grant further. (GRANT – WITH GRANT OPTION)</div>
+        <pre class="query">GRANT INSERT ON SCOTT.EMP TO USER8 WITH GRANT OPTION;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">10. Grant UPDATE and DELETE privileges on EMP table to USER9. (GRANT – UPDATE & DELETE)</div>
+        <pre class="query">GRANT UPDATE, DELETE ON SCOTT.EMP TO USER9;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Grant succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">11. Revoke SELECT privilege on EMP table from USER1. (REVOKE – BASIC)</div>
+        <pre class="query">REVOKE SELECT ON SCOTT.EMP FROM USER1;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">12. Revoke INSERT and UPDATE privileges on EMP table from USER2. (REVOKE – MULTIPLE PRIVILEGES)</div>
+        <pre class="query">REVOKE INSERT, UPDATE ON SCOTT.EMP FROM USER2;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">13. Revoke ALL privileges on DEPT table from USER3. (REVOKE – ALL)</div>
+        <pre class="query">REVOKE ALL ON SCOTT.DEPT FROM USER3;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">14. Revoke GRANT OPTION from USER4 on EMP table. (REVOKE – GRANT OPTION)</div>
+        <pre class="query">REVOKE SELECT ON SCOTT.EMP FROM USER4;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">15. Revoke UPDATE privilege on SAL column from USER5. (REVOKE – COLUMN LEVEL)</div>
+        <pre class="query">-- In Oracle, column-level privileges must be revoked by revoking the object-level privilege and re-granting.
+REVOKE UPDATE ON SCOTT.EMP FROM USER5;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">16. Revoke DELETE privilege on EMP table from USER6. (REVOKE – DELETE)</div>
+        <pre class="query">REVOKE DELETE ON SCOTT.EMP FROM USER6;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">17. Revoke privileges granted to PUBLIC on EMP table. (REVOKE – PUBLIC)</div>
+        <pre class="query">REVOKE SELECT ON SCOTT.EMP FROM PUBLIC;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">18. Revoke all privileges on EMP table from USER9. (REVOKE – CLEANUP)</div>
+        <pre class="query">REVOKE ALL ON SCOTT.EMP FROM USER9;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">19. Insert a new employee record into EMP table and commit the changes. (COMMIT – INSERT)</div>
+        <pre class="query">INSERT INTO SCOTT.EMP (EMPNO, ENAME, JOB, DEPTNO) VALUES (9001, 'JANE', 'CLERK', 10);
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">20. Update salary of employees in department 10 and commit the changes. (COMMIT – UPDATE)</div>
+        <pre class="query">UPDATE SCOTT.EMP SET SAL = SAL + 500 WHERE DEPTNO = 10;
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">21. Delete employees with salary less than 1000 and commit the transaction. (COMMIT – DELETE)</div>
+        <pre class="query">DELETE FROM SCOTT.EMP WHERE SAL < 1000;
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">22. Insert multiple records into DEPT table and commit them together. (COMMIT – MULTIPLE OPERATIONS)</div>
+        <pre class="query">INSERT INTO SCOTT.DEPT VALUES (50, 'IT', 'SAN JOSE');
+INSERT INTO SCOTT.DEPT VALUES (60, 'HR', 'SEATTLE');
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">23. Update department location and commit the changes. (COMMIT – DEPT TABLE)</div>
+        <pre class="query">UPDATE SCOTT.DEPT SET LOC = 'BOSTON' WHERE DEPTNO = 40;
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">24. Insert a new employee into EMP table but rollback the transaction. (ROLLBACK – INSERT)</div>
+        <pre class="query">INSERT INTO SCOTT.EMP (EMPNO, ENAME) VALUES (9002, 'MIKE');
+ROLLBACK;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Rollback complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">25. Update salary of employees and then rollback the changes. (ROLLBACK – UPDATE)</div>
+        <pre class="query">UPDATE SCOTT.EMP SET SAL = SAL * 1.1;
+ROLLBACK;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Rollback complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">26. Delete records from EMP table and rollback the transaction. (ROLLBACK – DELETE)</div>
+        <pre class="query">DELETE FROM SCOTT.EMP WHERE DEPTNO = 20;
+ROLLBACK;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Rollback complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">27. Perform multiple operations (INSERT, UPDATE, DELETE) and rollback all changes. (ROLLBACK – MULTIPLE OPERATIONS)</div>
+        <pre class="query">INSERT INTO SCOTT.DEPT VALUES (70, 'TEST', 'NY');
+UPDATE SCOTT.EMP SET SAL = 5000 WHERE ENAME = 'SMITH';
+DELETE FROM SCOTT.EMP WHERE DEPTNO = 30;
+ROLLBACK;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Rollback complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">28. Update department location and rollback before committing. (ROLLBACK – DEPT TABLE)</div>
+        <pre class="query">UPDATE SCOTT.DEPT SET LOC = 'CHICAGO' WHERE DEPTNO = 10;
+ROLLBACK;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Rollback complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">29. Insert a new employee, update salary, and commit only after verifying results. (TRANSACTION – COMMIT CONTROL)</div>
+        <pre class="query">INSERT INTO SCOTT.EMP (EMPNO, ENAME, SAL) VALUES (9003, 'SAM', 2000);
+UPDATE SCOTT.EMP SET SAL = 2500 WHERE EMPNO = 9003;
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">30. Insert multiple employees, rollback one operation using SAVEPOINT, then commit remaining. (TRANSACTION – SAVEPOINT + COMMIT)</div>
+        <pre class="query">INSERT INTO SCOTT.EMP (EMPNO, ENAME) VALUES (9004, 'ALEX');
+SAVEPOINT A;
+INSERT INTO SCOTT.EMP (EMPNO, ENAME) VALUES (9005, 'RYAN');
+ROLLBACK TO SAVEPOINT A;
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">31. Create a transaction where some operations are committed and others are rolled back. (TRANSACTION – PARTIAL CONTROL)</div>
+        <pre class="query">UPDATE SCOTT.EMP SET SAL = 3000 WHERE EMPNO = 7369;
+COMMIT;
+DELETE FROM SCOTT.EMP WHERE EMPNO = 7369;
+ROLLBACK;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Rollback complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">32. Demonstrate use of SAVEPOINT in EMP table operations. (TRANSACTION – SAVEPOINT)</div>
+        <pre class="query">UPDATE SCOTT.EMP SET SAL = 4000 WHERE EMPNO = 7499;
+SAVEPOINT S1;
+DELETE FROM SCOTT.EMP WHERE EMPNO = 7499;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Savepoint created.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">33. Perform update on EMP table and rollback to a specific SAVEPOINT. (TRANSACTION – ROLLBACK TO SAVEPOINT)</div>
+        <pre class="query">ROLLBACK TO SAVEPOINT S1;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Rollback complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">34. Grant privileges to a user, perform DML operations, and commit changes. (GRANT + TRANSACTION)</div>
+        <pre class="query">GRANT INSERT ON SCOTT.EMP TO USER1;
+INSERT INTO SCOTT.EMP (EMPNO, ENAME) VALUES (9006, 'JOHN');
+COMMIT;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Commit complete.</td></tr>
+        </table>
+    </div>
+
+    <div class="question-block">
+        <div class="question">35. Revoke privileges and verify access restrictions using EMP table. (REVOKE – PRACTICAL SCENARIO)</div>
+        <pre class="query">REVOKE INSERT ON SCOTT.EMP FROM USER1;</pre>
+        <div class="output-label">Output:</div>
+        <table class="output-table">
+            <tr><th>Message</th></tr>
+            <tr><td>Revoke succeeded.</td></tr>
+        </table>
+    </div>
+
+</body>
+</html>
